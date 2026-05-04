@@ -4,6 +4,9 @@ package dto;
  * DTO para Barberia.
  * 
  *
+ * 
+ * 
+ * prueba
  * @author Jesus Rodrigo Villegas - 261186
  */
 public class BarberiaDTO {
