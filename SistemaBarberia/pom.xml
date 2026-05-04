@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>itson</groupId>
+    <artifactId>SistemaBarberia</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>dto_barberia</module>
+        <module>persistencia</module>
+        <module>objetosNegocio</module>
+        <module>negocios_CorreoElectronico</module>
+        <module>negocios_GestorBarberias</module>
+        <module>negocios_GestorResenas</module>
+        <module>negocios_GestorServicios</module>
+        <module>negocios_GestorClientes</module>
+        <module>negocios_GestorCitas</module>
+        <module>negocios_InsertMasivo</module>
+        <module>negocios_InicioSesion</module>
+        <module>negocios_AgendarCita</module>
+        <module>presentacion_SistemaBarberia</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>
