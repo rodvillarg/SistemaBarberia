@@ -4,7 +4,7 @@ import org.bson.types.ObjectId;
 
 /**
  * Entidad de dominio Barberia para MongoDB.
- * Campos base validados por el maestro + descripcion, rutaLogo y activa.
+ * 
  *
  * @author Jesus Rodrigo Villegas - 261186
  */

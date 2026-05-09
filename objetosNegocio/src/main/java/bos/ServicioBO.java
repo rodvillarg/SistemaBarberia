@@ -10,6 +10,11 @@ import java.util.List;
 import mappers.ServicioMapper;
 import org.bson.types.ObjectId;
 
+/**
+ * 
+ * @author Jesus Rodrigo Villegas - 261186
+ */
+
 public class ServicioBO implements IServicioBO {
 
     private final ServicioDAO servicioDAO;
@@ -33,7 +38,7 @@ public class ServicioBO implements IServicioBO {
      *
      * @param servicioDTO
      * @return
-     * @author Jesus Rodrigo Villegas - 261186
+     * 
  */
     @Override
     public ServicioDTO registrar(ServicioDTO servicioDTO) {

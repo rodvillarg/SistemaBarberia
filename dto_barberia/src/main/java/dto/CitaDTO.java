@@ -18,7 +18,6 @@ public class CitaDTO {
     private dto.enums.MetodoPago metodoPago;
 
     public CitaDTO() {
-        this.estado = EstadoCita.PENDIENTE;
     }
 
     public CitaDTO(ClienteDTO cliente, BarberiaDTO barberia,
@@ -27,7 +26,6 @@ public class CitaDTO {
         this.barberia  = barberia;
         this.servicio  = servicio;
         this.fechaHora = fechaHora;
-        this.estado    = EstadoCita.PENDIENTE;
     }
 
     public String getId() {
@@ -80,4 +78,6 @@ public class CitaDTO {
         return "Cita #" + id + " | Fecha: " + fechaHora + " | Estado: " + estado
                 + " | Servicio: " + (servicio != null ? servicio.getNombre() : "N/A");
     }
+    
+    
 }

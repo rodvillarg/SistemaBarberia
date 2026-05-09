@@ -38,7 +38,9 @@ public class CitaMapper {
         if (dto.getServicio() != null && dto.getServicio().getId() != null)
             cita.setIdServicio(new ObjectId(dto.getServicio().getId()));
         cita.setFechaHora(dto.getFechaHora());
-        cita.setEstado(dto.getEstado());
+        if (dto.getEstado() != null) {
+            cita.setEstado(dto.getEstado());
+        }
         if (dto.getMetodoPago() != null)
             cita.setMetodoPago(dto.getMetodoPago());
         return cita;

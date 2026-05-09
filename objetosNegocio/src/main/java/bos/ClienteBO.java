@@ -13,6 +13,10 @@ import mappers.ClienteMapper;
 import org.bson.types.ObjectId;
 import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ * 
+ * @author Jesus Rodrigo Villegas - 261186
+*/
 public class ClienteBO implements IClienteBO {
 
     private static ClienteBO instance;
@@ -40,7 +44,7 @@ public class ClienteBO implements IClienteBO {
      * @param clienteDTO datos del cliente a registrar
      * @return ClienteDTO con el ID asignado por MongoDB
      * @throws UsuarioDuplicadoException si el nombre de usuario ya existe
-     * @author Jesus Rodrigo Villegas - 261186
+     * 
  */
     @Override
     public ClienteDTO registrar(ClienteDTO clienteDTO) throws UsuarioDuplicadoException {
@@ -101,10 +105,12 @@ public class ClienteBO implements IClienteBO {
         return null;
     }
 
+    @Override
     public boolean esCliente(ClienteDTO cliente) {
         return cliente.getRol() == dto.enums.RolUsuario.CLIENTE;
     }
 
+    @Override
     public boolean esBarbero(ClienteDTO cliente) {
         return cliente.getRol() == dto.enums.RolUsuario.BARBERO;
     }
@@ -113,8 +119,9 @@ public class ClienteBO implements IClienteBO {
      *
      * @param usuario
      */
+    @Override
     public void confirmarRolBarbero(String usuario) {
-        // TODO: mover esto a un metodo del DAO mas adelante
+        
         Cliente cliente = clienteDAO.buscarPorUsuario(usuario);
         if (cliente != null && !dto.enums.RolUsuario.BARBERO.equals(cliente.getRol())) {
             cliente.setRol(dto.enums.RolUsuario.BARBERO);

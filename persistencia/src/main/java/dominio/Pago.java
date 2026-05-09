@@ -59,8 +59,6 @@ public class Pago {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-
-    public boolean estaCompletado() {
-        return EstadoPago.COMPLETADO.equals(this.estado);
-    }
+    
+    
 }

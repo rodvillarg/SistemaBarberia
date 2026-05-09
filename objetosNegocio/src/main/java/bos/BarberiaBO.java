@@ -10,6 +10,12 @@ import java.util.List;
 import mappers.BarberiaMapper;
 import org.bson.types.ObjectId;
 
+    /**
+     *
+     * 
+     * @author Jesus Rodrigo Villegas - 261186
+    */
+
 public class BarberiaBO implements IBarberiaBO {
 
     private final BarberiaDAO barberiaDAO;
@@ -33,7 +39,7 @@ public class BarberiaBO implements IBarberiaBO {
      *
      * @param barberiaDTO
      * @return
-     * @author Jesus Rodrigo Villegas - 261186
+     * 
  */
     @Override
     public BarberiaDTO registrar(BarberiaDTO barberiaDTO) {
@@ -96,7 +102,5 @@ public class BarberiaBO implements IBarberiaBO {
         return mapper.toDTO(barberia);
     }
 
-    public boolean isActiva(BarberiaDTO barberia) {
-        return barberia.isActiva();
-    }
+    
 }

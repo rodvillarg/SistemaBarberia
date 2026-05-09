@@ -32,7 +32,6 @@ public class BarberiaDTO {
         this.telefono             = telefono;
         this.idBarbero            = idBarbero;
         this.descripcion          = descripcion;
-        this.activa               = true;
     }
 
     public String getId() {

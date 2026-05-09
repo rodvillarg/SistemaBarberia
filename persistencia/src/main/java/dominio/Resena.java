@@ -54,8 +54,4 @@ public class Resena {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-
-    public boolean calificacionValida() {
-        return calificacion >= 1 && calificacion <= 5;
-    }
 }

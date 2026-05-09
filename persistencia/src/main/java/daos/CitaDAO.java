@@ -97,6 +97,14 @@ public class CitaDAO implements ICitaDAO {
                 com.mongodb.client.model.Updates.set("estado",
                         dto.enums.EstadoCita.CANCELADA));
     }
+    
+    @Override
+    public void completarCita(ObjectId idCita) {
+        coleccion.updateOne(
+                com.mongodb.client.model.Filters.eq("_id", idCita),
+                com.mongodb.client.model.Updates.set("estado",
+                        dto.enums.EstadoCita.COMPLETADA));
+    }
 
     @Override
     public boolean existeConflictoCliente(ObjectId idCliente, String fechaHora) {

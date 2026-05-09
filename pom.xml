@@ -15,14 +15,15 @@
         <module>objetosNegocio</module>
         <module>negocios_CorreoElectronico</module>
         <module>negocios_GestorBarberias</module>
+        <module>negocios_GestorHorarios</module>
         <module>negocios_GestorResenas</module>
         <module>negocios_GestorServicios</module>
         <module>negocios_GestorClientes</module>
         <module>negocios_GestorCitas</module>
         <module>negocios_InsertMasivo</module>
         <module>negocios_InicioSesion</module>
-        <module>negocios_AgendarCita</module>
         <module>presentacion_SistemaBarberia</module>
+        
     </modules>
 
     <properties>

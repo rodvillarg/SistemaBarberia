@@ -17,9 +17,12 @@ import exceptions.ClienteNoEncontradoException;
 import exceptions.CitaConflictoClienteException;
 import exceptions.HorarioNoDisponibleException;
 import exceptions.ServicioNoEncontradoException;
+import exceptions.CitaYaCanceladaException;
 import interfaces.ICitaBO;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import mappers.BarberiaMapper;
 import mappers.CitaMapper;
 import mappers.ClienteMapper;
@@ -27,6 +30,7 @@ import mappers.ServicioMapper;
 import org.bson.types.ObjectId;
 
 /**
+ * 
  * @author Jesus Rodrigo Villegas - 261186
  */
 public class CitaBO implements ICitaBO {
@@ -143,6 +147,20 @@ public class CitaBO implements ICitaBO {
                     barberiaMapper.toDTO(barberia),
                     servicioMapper.toDTO(servicio)));
         }
+
+        // Auto-completar citas vencidas
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
+        LocalDateTime ahora = LocalDateTime.now();
+        for (CitaDTO c : resultado) {
+            if (c.getEstado() == EstadoCita.CONFIRMADA) {
+                LocalDateTime fechaCita = LocalDateTime.parse(c.getFechaHora(), formatter);
+                if (fechaCita.isBefore(ahora)) {
+                    citaDAO.completarCita(new ObjectId(c.getId()));
+                    c.setEstado(EstadoCita.COMPLETADA);
+                }
+            }
+        }
+
         return resultado;
     }
 
@@ -175,13 +193,24 @@ public class CitaBO implements ICitaBO {
         return citaDAO.buscarHorasOcupadas(new ObjectId(barberiaId), fecha);
     }
 
-    /**
-     *
-     * @param idCita
-     */
     @Override
     public void cancelarCita(String idCita) {
-        citaDAO.cancelarCita(new ObjectId(idCita));
+        ObjectId oid;
+        try {
+            oid = new ObjectId(idCita);
+        } catch (IllegalArgumentException e) {
+            throw new CitaNoEncontradaException("El ID de la cita no tiene un formato valido.");
+        }
+
+        Cita cita = citaDAO.buscarPorId(oid);
+        if (cita == null)
+            throw new CitaNoEncontradaException("Cita no encontrada.");
+
+        if (cita.getEstado() == EstadoCita.CANCELADA)
+            throw new CitaYaCanceladaException("La cita ya esta cancelada.");
+
+        cita.cancelar();
+        citaDAO.cancelarCita(oid);
     }
 
     public boolean estaPendiente(CitaDTO cita) {

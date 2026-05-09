@@ -6,8 +6,7 @@ import org.bson.types.ObjectId;
 
 /**
  * Entidad de dominio Cita para MongoDB.
- * Variables validadas por el maestro: id, idCliente, idBarberia, idServicio,
- * fechaHora (String "YYYY/MM/DD H:mm"), estado.
+ * 
  *
  * @author Jesus Rodrigo Villegas - 261186
  */
@@ -22,7 +21,7 @@ public class Cita {
     private MetodoPago metodoPago;
 
     public Cita() {
-        this.estado = EstadoCita.PENDIENTE;
+        this.estado = EstadoCita.CONFIRMADA;
     }
 
     public ObjectId getId() {
@@ -67,16 +66,13 @@ public class Cita {
     public void setMetodoPago(MetodoPago metodoPago) {
         this.metodoPago = metodoPago;
     }
+    
+    public void confirmar() {
+        this.estado = EstadoCita.CONFIRMADA;
+    }
 
-    public boolean estaPendiente() {
-        return EstadoCita.PENDIENTE.equals(this.estado);
+    public void cancelar() {
+        this.estado = EstadoCita.CANCELADA;
     }
-    public boolean estaConfirmada() {
-        return EstadoCita.CONFIRMADA.equals(this.estado);
-    }
-    public boolean estaCancelada() {
-        return EstadoCita.CANCELADA.equals(this.estado);
-    }
-    public void confirmar() { this.estado = EstadoCita.CONFIRMADA; }
-    public void cancelar()  { this.estado = EstadoCita.CANCELADA; }
+    
 }

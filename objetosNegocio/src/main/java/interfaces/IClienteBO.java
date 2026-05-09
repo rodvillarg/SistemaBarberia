@@ -24,4 +24,8 @@ public interface IClienteBO {
     ClienteDTO obtenerPorUsuario(String usuario);
 
     void confirmarRolBarbero(String usuario);
+    
+    boolean esCliente(ClienteDTO cliente);
+    
+    boolean esBarbero(ClienteDTO cliente);
 }

@@ -1,0 +1,14 @@
+/presentacion_SistemaBarberia/target/
+/dto_barberia/target/
+/persistencia/target/
+/objetosNegocio/target/
+/negocios_CorreoElectronico/target/
+/negocios_InicioSesion/target/
+/negocios_GestorCitas/target/
+/negocios_GestorBarberias/target/
+/negocios_GestorResenas/target/
+/negocios_GestorServicios/target/
+/negocios_GestorClientes/target/
+/negocios_InsertMasivo/target/
+/negocios_AgendarCita/target/
+/negocios_GestorHorarios/target/

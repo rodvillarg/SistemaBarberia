@@ -70,11 +70,6 @@ public class Cliente {
     public void setRol(RolUsuario rol) {
         this.rol = rol;
     }
-
-    public boolean esCliente() {
-        return RolUsuario.CLIENTE.equals(this.rol);
-    }
-    public boolean esBarbero() {
-        return RolUsuario.BARBERO.equals(this.rol);
-    }
+    
+    
 }

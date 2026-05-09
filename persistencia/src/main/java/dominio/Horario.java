@@ -49,10 +49,4 @@ public class Horario {
         this.horaCierre = horaCierre;
     }
 
-    public boolean estaDisponible(String horaConsulta) {
-        LocalTime apertura = LocalTime.parse(horaApertura);
-        LocalTime cierre   = LocalTime.parse(horaCierre);
-        LocalTime consulta = LocalTime.parse(horaConsulta);
-        return !consulta.isBefore(apertura) && consulta.isBefore(cierre);
-    }
 }

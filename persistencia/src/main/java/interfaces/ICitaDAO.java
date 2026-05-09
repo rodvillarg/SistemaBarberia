@@ -28,4 +28,6 @@ public interface ICitaDAO {
     boolean existeConflictoCliente(ObjectId idCliente, String fechaHora);
 
     void cancelarCita(ObjectId idCita);
+   
+    void completarCita(ObjectId idCita);
 }
