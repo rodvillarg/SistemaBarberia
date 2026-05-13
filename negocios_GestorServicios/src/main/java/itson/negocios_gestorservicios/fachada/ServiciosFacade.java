@@ -4,30 +4,30 @@
  */
 package itson.negocios_gestorservicios.fachada;
 
+import bos.ServicioBO;
 import dto.ServicioDTO;
 import exceptions.ServicioNoEncontradoException;
-import itson.negocios_gestorservicios.GestorServicios;
-import itson.negocios_gestorservicios.IGestorServicios;
+import interfaces.IServicioBO;
 import java.util.List;
+
 /**
- *
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
 public class ServiciosFacade implements IServiciosFacade {
-    
-    private final IGestorServicios gestorServicios;
+
+    private final IServicioBO servicioBO;
 
     public ServiciosFacade() {
-        this.gestorServicios = new GestorServicios();
+        this.servicioBO = ServicioBO.getInstancia();
     }
 
     @Override
     public List<ServicioDTO> obtenerServiciosPorBarberia(String barberiaId) {
-        return gestorServicios.obtenerServiciosPorBarberia(barberiaId);
+        return servicioBO.obtenerServiciosPorBarberia(barberiaId);
     }
 
     @Override
     public ServicioDTO obtenerPorId(String id) throws ServicioNoEncontradoException {
-        return gestorServicios.obtenerPorId(id);
+        return servicioBO.obtenerPorId(id);
     }
 }

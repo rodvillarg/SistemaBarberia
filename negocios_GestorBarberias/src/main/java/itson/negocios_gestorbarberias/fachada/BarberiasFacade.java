@@ -4,40 +4,40 @@
  */
 package itson.negocios_gestorbarberias.fachada;
 
+import bos.BarberiaBO;
 import dto.BarberiaDTO;
 import exceptions.BarberiaNoEncontradaException;
-import itson.negocios_gestorbarberias.GestorBarberias;
-import itson.negocios_gestorbarberias.IGestorBarberias;
+import interfaces.IBarberiaBO;
 import java.util.List;
+
 /**
- *
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public class BarberiasFacade implements IBarberiasFacade{
-    
-    private final IGestorBarberias gestorBarberias;
+public class BarberiasFacade implements IBarberiasFacade {
+
+    private final IBarberiaBO barberiaBO;
 
     public BarberiasFacade() {
-        this.gestorBarberias = new GestorBarberias();
+        this.barberiaBO = BarberiaBO.getInstancia();
     }
 
     @Override
     public BarberiaDTO registrar(BarberiaDTO barberia) {
-        return gestorBarberias.registrar(barberia);
+        return barberiaBO.registrar(barberia);
     }
 
     @Override
     public List<BarberiaDTO> obtenerBarberiasActivas() {
-        return gestorBarberias.obtenerBarberiasActivas();
+        return barberiaBO.obtenerBarberiasActivas();
     }
 
     @Override
     public BarberiaDTO obtenerPorId(String id) throws BarberiaNoEncontradaException {
-        return gestorBarberias.obtenerPorId(id);
+        return barberiaBO.obtenerPorId(id);
     }
 
     @Override
     public BarberiaDTO obtenerPorNombre(String nombre) throws BarberiaNoEncontradaException {
-        return gestorBarberias.obtenerPorNombre(nombre);
+        return barberiaBO.obtenerPorNombre(nombre);
     }
 }

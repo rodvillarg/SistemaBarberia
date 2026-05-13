@@ -4,49 +4,49 @@
  */
 package itson.negocios_gestorclientes.fachada;
 
+import bos.ClienteBO;
 import dto.ClienteDTO;
 import dto.SesionDTO;
 import exceptions.ClienteNoEncontradoException;
 import exceptions.CredencialesInvalidasException;
 import exceptions.UsuarioDuplicadoException;
-import itson.negocios_gestorclientes.GestorClientes;
-import itson.negocios_gestorclientes.IGestorClientes;
+import interfaces.IClienteBO;
 
 /**
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
 public class ClientesFacade implements IClientesFacade {
 
-    private final IGestorClientes gestorClientes;
+    private final IClienteBO clienteBO;
 
     public ClientesFacade() {
-        this.gestorClientes = new GestorClientes();
+        this.clienteBO = ClienteBO.getInstance();
     }
 
     @Override
     public ClienteDTO registrar(ClienteDTO cliente) throws UsuarioDuplicadoException {
-        return gestorClientes.registrar(cliente);
+        return clienteBO.registrar(cliente);
     }
 
     @Override
     public ClienteDTO iniciarSesion(SesionDTO sesion)
             throws CredencialesInvalidasException, ClienteNoEncontradoException {
-        return gestorClientes.iniciarSesion(sesion);
+        return clienteBO.iniciarSesion(sesion);
     }
 
     @Override
     public ClienteDTO obtenerPorId(String id) throws ClienteNoEncontradoException {
-        return gestorClientes.obtenerPorId(id);
+        return clienteBO.obtenerPorId(id);
     }
-    
+
     @Override
     public boolean esCliente(ClienteDTO cliente) {
-        return gestorClientes.esCliente(cliente);
+        return clienteBO.esCliente(cliente);
     }
 
     @Override
     public boolean esBarbero(ClienteDTO cliente) {
-        return gestorClientes.esBarbero(cliente);
+        return clienteBO.esBarbero(cliente);
     }
 }
 

@@ -4,36 +4,34 @@
  */
 package itson.negocios_gestorresenas.fachada;
 
-
+import bos.ResenaBO;
 import dto.ResenaDTO;
-import itson.negocios_gestorresenas.GestorResenas;
-import itson.negocios_gestorresenas.IGestorResenas;
+import interfaces.IResenaBO;
 import java.util.List;
 
 /**
- *
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public class ResenasFacade implements IResenasFacade{
-    
-     private final IGestorResenas gestorResenas;
+public class ResenasFacade implements IResenasFacade {
+
+    private final IResenaBO resenaBO;
 
     public ResenasFacade() {
-        this.gestorResenas = new GestorResenas();
+        this.resenaBO = ResenaBO.getInstancia();
     }
 
     @Override
     public ResenaDTO agregar(ResenaDTO resena) {
-        return gestorResenas.agregar(resena);
+        return resenaBO.agregar(resena);
     }
 
     @Override
     public List<ResenaDTO> obtenerPorBarberia(String idBarberia) {
-        return gestorResenas.obtenerPorBarberia(idBarberia);
+        return resenaBO.obtenerPorBarberia(idBarberia);
     }
 
     @Override
     public double calcularPromedio(String idBarberia) {
-        return gestorResenas.calcularPromedio(idBarberia);
+        return resenaBO.calcularPromedio(idBarberia);
     }
 }

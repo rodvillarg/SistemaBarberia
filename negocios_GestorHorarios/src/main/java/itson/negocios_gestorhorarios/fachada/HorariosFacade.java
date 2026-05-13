@@ -4,24 +4,24 @@
  */
 package itson.negocios_gestorhorarios.fachada;
 
+import bos.HorarioBO;
 import dto.HorarioDTO;
-import itson.negocios_gestorhorarios.GestorHorarios;
-import itson.negocios_gestorhorarios.IGestorHorarios;
+import interfaces.IHorarioBO;
 import java.util.List;
+
 /**
- *
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public class HorariosFacade implements IHorariosFacade{
-    
-    private final IGestorHorarios gestorHorarios;
+public class HorariosFacade implements IHorariosFacade {
+
+    private final IHorarioBO horarioBO;
 
     public HorariosFacade() {
-        this.gestorHorarios = new GestorHorarios();
+        this.horarioBO = HorarioBO.getInstancia();
     }
 
     @Override
     public List<HorarioDTO> obtenerHorariosPorBarberia(String barberiaId) {
-        return gestorHorarios.obtenerHorariosPorBarberia(barberiaId);
+        return horarioBO.obtenerHorariosPorBarberia(barberiaId);
     }
 }
