@@ -35,7 +35,10 @@ public class PanelInicioSesion extends JPanel {
     private JButton btnEntrar;
     private JButton btnRegistrarse;
 
-    public PanelInicioSesion() {
+    private final ControlVistas control;
+
+    public PanelInicioSesion(ControlVistas control) {
+        this.control = control;
         initUI();
     }
 
@@ -134,7 +137,7 @@ public class PanelInicioSesion extends JPanel {
     private void registrarAcciones() {
         btnEntrar.addActionListener(e -> iniciarSesion());
         btnRegistrarse.addActionListener(e ->
-                ControlVistas.mostrar(ControlVistas.pantallaRegistro));
+                control.mostrar(ControlVistas.pantallaRegistro));
         txtUsuario.addActionListener(e -> txtContrasena.requestFocusInWindow());
         txtContrasena.addActionListener(e -> iniciarSesion());
     }
@@ -162,11 +165,11 @@ public class PanelInicioSesion extends JPanel {
             txtUsuario.setText("");
             txtContrasena.setText("");
             if (facadeLogin.esBarbero(cliente)) {
-                ControlVistas.getPanelMenuAdmin()
+                control.<PanelMenuAdmin>getPanel(ControlVistas.pantallaMenuAdmin)
                         .actualizarAdmin(cliente);
-                ControlVistas.mostrar(ControlVistas.pantallaMenuAdmin);
+                control.mostrar(ControlVistas.pantallaMenuAdmin);
             } else {
-                ControlVistas.mostrar(ControlVistas.pantallaBarberias);
+                control.mostrar(ControlVistas.pantallaBarberias);
             }
         } catch (ClienteNoEncontradoException ex) {
             JOptionPane.showMessageDialog(this,

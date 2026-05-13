@@ -12,15 +12,11 @@ import presentacion.controles.ControlInsertMasivo;
 import presentacion.controles.ControlVistas;
 
 /**
- *
  * @author Jesus Rodrigo Villegas - 261186
  */
 public class Inicio {
 
-    /**
-     * @param args the command line arguments
-     */
-     public static void main(String[] args) {
+    public static void main(String[] args) {
 
         ControlInsertMasivo.insertMasivo();
 
@@ -33,46 +29,48 @@ public class Inicio {
                 UIManager.put("Button.foreground", new Color(241, 245, 249));
             } catch (Exception ignored) {}
 
-            PanelInicioSesion       panelLogin        = new PanelInicioSesion();
-            PanelRegistro           panelRegistro     = new PanelRegistro();
-            PanelSeleccionBarberia  panelBarberias    = new PanelSeleccionBarberia();
-            PanelSeleccionServicio  panelServicios    = new PanelSeleccionServicio();
-            PanelSeleccionFechaHora panelFechaHora    = new PanelSeleccionFechaHora();
-            PanelConfirmacion       panelConfirmacion = new PanelConfirmacion();
-            PanelMisCitas           panelMisCitas     = new PanelMisCitas();
-            PanelMenuAdmin          panelMenuAdmin    = new PanelMenuAdmin(new ClienteDTO());
-            PanelGestionCitas       panelGestionCitas = new PanelGestionCitas();
-            PanelAdminGestionCitas  panelAdminGestion = new PanelAdminGestionCitas();
-            PanelRegistroBarberia   panelRegBarberia  = new PanelRegistroBarberia();
-            PanelConfirmarCita      panelConfirmarCita = new PanelConfirmarCita();
-            PanelInfoBarberia       panelInfoBarberia  = new PanelInfoBarberia();
-            PanelRegistroCuenta     panelRegCuenta     = new PanelRegistroCuenta();
-            PanelPagoTarjeta        panelPagoTarjeta   = new PanelPagoTarjeta();
-            PanelResenas            panelResenas       = new PanelResenas();
-            PanelGestionarMisCitas  panelGestionarMisCitas = new PanelGestionarMisCitas();
-            PanelAsignarHorario panelAsignarHorario = new PanelAsignarHorario();
+            ControlVistas control = new ControlVistas();
 
-            ControlVistas.registrarPanel(panelLogin);
-            ControlVistas.registrarPanel(panelRegistro);
-            ControlVistas.registrarPanel(panelBarberias);
-            ControlVistas.registrarPanel(panelServicios);
-            ControlVistas.registrarPanel(panelFechaHora);
-            ControlVistas.registrarPanel(panelConfirmacion);
-            ControlVistas.registrarPanel(panelMisCitas);
-            ControlVistas.registrarPanel(panelMenuAdmin);
-            ControlVistas.registrarPanel(panelGestionCitas);
-            ControlVistas.registrarPanel(panelAdminGestion);
-            ControlVistas.registrarPanel(panelRegBarberia);
-            ControlVistas.registrarPanel(panelConfirmarCita);
-            ControlVistas.registrarPanel(panelInfoBarberia);
-            ControlVistas.registrarPanel(panelRegCuenta);
-            ControlVistas.registrarPanel(panelPagoTarjeta);
-            ControlVistas.registrarPanel(panelResenas);
-            ControlVistas.registrarPanel(panelGestionarMisCitas);
-            ControlVistas.registrarPanel(panelAsignarHorario);
+            PanelInicioSesion       panelLogin             = new PanelInicioSesion(control);
+            PanelRegistro           panelRegistro          = new PanelRegistro(control);
+            PanelSeleccionBarberia  panelBarberias         = new PanelSeleccionBarberia(control);
+            PanelSeleccionServicio  panelServicios         = new PanelSeleccionServicio(control);
+            PanelSeleccionFechaHora panelFechaHora         = new PanelSeleccionFechaHora(control);
+            PanelConfirmacion       panelConfirmacion      = new PanelConfirmacion(control);
+            PanelMisCitas           panelMisCitas          = new PanelMisCitas(control);
+            PanelMenuAdmin          panelMenuAdmin         = new PanelMenuAdmin(control, new ClienteDTO());
+            PanelGestionCitas       panelGestionCitas      = new PanelGestionCitas(control);
+            PanelAdminGestionCitas  panelAdminGestion      = new PanelAdminGestionCitas(control);
+            PanelRegistroBarberia   panelRegBarberia       = new PanelRegistroBarberia(control);
+            PanelConfirmarCita      panelConfirmarCita     = new PanelConfirmarCita(control);
+            PanelInfoBarberia       panelInfoBarberia      = new PanelInfoBarberia(control);
+            PanelRegistroCuenta     panelRegCuenta         = new PanelRegistroCuenta(control);
+            PanelPagoTarjeta        panelPagoTarjeta       = new PanelPagoTarjeta(control);
+            PanelResenas            panelResenas           = new PanelResenas(control);
+            PanelGestionarMisCitas  panelGestionarMisCitas = new PanelGestionarMisCitas(control);
+            PanelAsignarHorario     panelAsignarHorario    = new PanelAsignarHorario(control);
 
-            ControlVistas.mostrar(ControlVistas.pantallaLogin);
-            ControlVistas.iniciar();
+            control.registrarPanel(ControlVistas.pantallaLogin,           panelLogin);
+            control.registrarPanel(ControlVistas.pantallaRegistro,        panelRegistro);
+            control.registrarPanel(ControlVistas.pantallaBarberias,       panelBarberias);
+            control.registrarPanel(ControlVistas.pantallaServicios,       panelServicios);
+            control.registrarPanel(ControlVistas.pantallaFechaHora,      panelFechaHora);
+            control.registrarPanel(ControlVistas.pantallaConfirmacion,    panelConfirmacion);
+            control.registrarPanel(ControlVistas.pantallaMisCitas,       panelMisCitas);
+            control.registrarPanel(ControlVistas.pantallaMenuAdmin,      panelMenuAdmin);
+            control.registrarPanel(ControlVistas.pantallaGestionCitas,   panelGestionCitas);
+            control.registrarPanel(ControlVistas.pantallaAdminGestionCitas,   panelAdminGestion);
+            control.registrarPanel(ControlVistas.pantallaRegBarberia,    panelRegBarberia);
+            control.registrarPanel(ControlVistas.pantallaConfirmarCita,  panelConfirmarCita);
+            control.registrarPanel(ControlVistas.pantallaInfoBarberia,   panelInfoBarberia);
+            control.registrarPanel(ControlVistas.pantallaRegistroCuenta, panelRegCuenta);
+            control.registrarPanel(ControlVistas.pantallaPagoTarjeta,    panelPagoTarjeta);
+            control.registrarPanel(ControlVistas.pantallaResenas,         panelResenas);
+            control.registrarPanel(ControlVistas.pantallaGestionarMisCitas, panelGestionarMisCitas);
+            control.registrarPanel(ControlVistas.pantallaAsignarHorario, panelAsignarHorario);
+
+            control.mostrar(ControlVistas.pantallaLogin);
+            control.iniciar();
 
             panelBarberias.addAncestorListener(new javax.swing.event.AncestorListener() {
                 @Override public void ancestorAdded(javax.swing.event.AncestorEvent e)   { panelBarberias.cargarBarberias(); }
