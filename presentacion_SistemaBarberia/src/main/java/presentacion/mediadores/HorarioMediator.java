@@ -2,31 +2,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package itson.negocios_gestorhorarios.fachada;
+package presentacion.mediadores;
 
-import bos.HorarioBO;
 import dto.HorarioDTO;
-import interfaces.IHorarioBO;
+import itson.negocios_gestorhorarios.fachada.HorariosFacade;
+import itson.negocios_gestorhorarios.fachada.IHorariosFacade;
 import java.util.List;
 
 /**
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public class HorariosFacade implements IHorariosFacade {
+public class HorarioMediator implements IHorarioMediator {
 
-    private final IHorarioBO horarioBO;
+    private final IHorariosFacade facadeHorarios;
 
-    public HorariosFacade() {
-        this.horarioBO = HorarioBO.getInstancia();
+    public HorarioMediator() {
+        this.facadeHorarios = new HorariosFacade();
     }
     
     @Override
     public HorarioDTO registrar(HorarioDTO horario) {
-        return horarioBO.registrar(horario);
+        return facadeHorarios.registrar(horario);
     }
 
     @Override
     public List<HorarioDTO> obtenerHorariosPorBarberia(String barberiaId) {
-        return horarioBO.obtenerHorariosPorBarberia(barberiaId);
+        return facadeHorarios.obtenerHorariosPorBarberia(barberiaId);
     }
 }

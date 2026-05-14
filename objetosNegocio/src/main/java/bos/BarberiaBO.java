@@ -102,5 +102,12 @@ public class BarberiaBO implements IBarberiaBO {
         return mapper.toDTO(barberia);
     }
 
-    
+    @Override
+    public BarberiaDTO obtenerPorBarbero(String idBarbero) {
+        Barberia barberia = barberiaDAO.buscarPorIdBarbero(idBarbero);
+        if (barberia == null) {
+            return null;
+        }
+        return mapper.toDTO(barberia);
+    }
 }

@@ -20,4 +20,6 @@ public interface IBarberiasFacade {
     BarberiaDTO obtenerPorId(String id) throws BarberiaNoEncontradaException;
 
     BarberiaDTO obtenerPorNombre(String nombre) throws BarberiaNoEncontradaException;
+    
+    BarberiaDTO obtenerPorBarbero(String idBarbero);
 }

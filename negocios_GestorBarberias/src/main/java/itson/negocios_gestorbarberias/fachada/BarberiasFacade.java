@@ -40,4 +40,9 @@ public class BarberiasFacade implements IBarberiasFacade {
     public BarberiaDTO obtenerPorNombre(String nombre) throws BarberiaNoEncontradaException {
         return barberiaBO.obtenerPorNombre(nombre);
     }
+    
+    @Override
+    public BarberiaDTO obtenerPorBarbero(String idBarbero) {
+        return barberiaBO.obtenerPorBarbero(idBarbero);
+    }
 }

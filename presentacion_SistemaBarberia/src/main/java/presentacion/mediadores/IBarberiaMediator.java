@@ -1,19 +1,19 @@
-package interfaces;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ */
+package presentacion.mediadores;
 
 import dto.BarberiaDTO;
 import exceptions.BarberiaNoEncontradaException;
 import java.util.List;
 
 /**
- * Interfaz de negocio para operaciones con Barberia.
- *
- * @author Jesus Rodrigo Villegas - 261186
+ * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public interface IBarberiaBO {
+public interface IBarberiaMediator {
 
     BarberiaDTO registrar(BarberiaDTO barberia);
-
-    void actualizarIdBarbero(String idBarberia, String idBarbero);
 
     List<BarberiaDTO> obtenerBarberiasActivas();
 
@@ -22,5 +22,4 @@ public interface IBarberiaBO {
     BarberiaDTO obtenerPorNombre(String nombre) throws BarberiaNoEncontradaException;
     
     BarberiaDTO obtenerPorBarbero(String idBarbero);
-
 }

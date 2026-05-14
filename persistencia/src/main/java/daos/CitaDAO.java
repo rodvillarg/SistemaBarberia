@@ -55,7 +55,7 @@ public class CitaDAO implements ICitaDAO {
     }
 
     /**
-     * Retorna todos los fechaHora ocupados en una barbería para una fecha dada.
+     * Retorna todos los fechaHora ocupados en una barberia para una fecha dada.
      * La fecha viene como "YYYY/MM/DD" y busca todas las citas cuyo fechaHora
      * empiece con esa cadena.
      */

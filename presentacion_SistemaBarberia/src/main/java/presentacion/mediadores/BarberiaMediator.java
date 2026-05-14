@@ -40,4 +40,9 @@ public class BarberiaMediator implements IBarberiaMediator {
     public BarberiaDTO obtenerPorNombre(String nombre) throws BarberiaNoEncontradaException {
         return facadeBarberias.obtenerPorNombre(nombre);
     }
+    
+    @Override
+    public BarberiaDTO obtenerPorBarbero(String idBarbero) {
+        return facadeBarberias.obtenerPorBarbero(idBarbero);
+    }
 }

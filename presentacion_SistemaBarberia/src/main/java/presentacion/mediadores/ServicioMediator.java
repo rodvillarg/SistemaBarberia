@@ -2,37 +2,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package itson.negocios_gestorservicios.fachada;
+package presentacion.mediadores;
 
-import bos.ServicioBO;
 import dto.ServicioDTO;
 import exceptions.ServicioNoEncontradoException;
-import interfaces.IServicioBO;
+import itson.negocios_gestorservicios.fachada.IServiciosFacade;
+import itson.negocios_gestorservicios.fachada.ServiciosFacade;
 import java.util.List;
 
 /**
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public class ServiciosFacade implements IServiciosFacade {
+public class ServicioMediator implements IServicioMediator {
 
-    private final IServicioBO servicioBO;
+    private final IServiciosFacade facadeServicios;
 
-    public ServiciosFacade() {
-        this.servicioBO = ServicioBO.getInstancia();
+    public ServicioMediator() {
+        this.facadeServicios = new ServiciosFacade();
     }
     
     @Override
     public ServicioDTO registrar(ServicioDTO servicio) {
-        return servicioBO.registrar(servicio);
+        return facadeServicios.registrar(servicio);
     }
 
     @Override
     public List<ServicioDTO> obtenerServiciosPorBarberia(String barberiaId) {
-        return servicioBO.obtenerServiciosPorBarberia(barberiaId);
+        return facadeServicios.obtenerServiciosPorBarberia(barberiaId);
     }
 
     @Override
     public ServicioDTO obtenerPorId(String id) throws ServicioNoEncontradoException {
-        return servicioBO.obtenerPorId(id);
+        return facadeServicios.obtenerPorId(id);
     }
 }

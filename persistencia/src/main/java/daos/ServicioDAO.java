@@ -11,15 +11,12 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
- * Implementación del DAO para la entidad Servicio usando MongoDB.
+ * Implementacion del DAO para la entidad Servicio usando MongoDB.
  *
  * @author Jesus Rodrigo Villegas - 261186
  */
 public class ServicioDAO implements IServicioDAO {
 
-    /**
-     *
-     */
     private final MongoCollection<Servicio> coleccion;
 
     public ServicioDAO() {

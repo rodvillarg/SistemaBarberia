@@ -16,7 +16,8 @@ public interface IBarberiaDAO {
     void actualizarIdBarbero(ObjectId idBarberia, String idBarbero);
 
     Barberia buscarPorId(ObjectId id);
-
+    
+    Barberia buscarPorIdBarbero(String idBarbero);
 
     List<Barberia> buscarTodas();
 

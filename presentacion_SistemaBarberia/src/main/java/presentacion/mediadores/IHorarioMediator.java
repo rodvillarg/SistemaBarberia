@@ -2,19 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package itson.negocios_gestorhorarios.fachada;
+package presentacion.mediadores;
 
 import dto.HorarioDTO;
 import java.util.List;
 
 /**
- *
  * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public interface IHorariosFacade {
+public interface IHorarioMediator {
     
     HorarioDTO registrar(HorarioDTO horario);
-    
+
     List<HorarioDTO> obtenerHorariosPorBarberia(String barberiaId);
-    
 }
