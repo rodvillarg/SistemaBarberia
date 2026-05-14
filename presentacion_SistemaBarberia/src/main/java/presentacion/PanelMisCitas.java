@@ -123,8 +123,8 @@ public class PanelMisCitas extends JPanel {
         btnGestionar.setOpaque(true);
         btnGestionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnGestionar.addActionListener(e -> {
-            control.<PanelGestionarMisCitas>getPanel(ControlVistas.pantallaGestionarMisCitas).cargarCitas();
-            control.mostrar(ControlVistas.pantallaGestionarMisCitas);
+            control.<PanelGestionarCitas>getPanel(ControlVistas.pantallaGestionarCitas).cargarCitas();
+            control.mostrar(ControlVistas.pantallaGestionarCitas);
         });
         footer.add(btnGestionar, BorderLayout.EAST);
 

@@ -15,22 +15,22 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
 import presentacion.controles.ControlVistas;
+import presentacion.utilerias.GestorSesion;
 
 /**
- *
- * @author Jesus Rodrigo Villegas - 261186
+ * @author Jesus Rodrigo Villegas Argüelles - 261186
  */
-public class PanelConfirmacion extends JPanel{
-    private static final Color FONDO       = new Color(10, 10, 10);
-    private static final Color CARD        = new Color(22, 22, 22);
-    private static final Color BORDE       = new Color(55, 55, 55);
-    private static final Color TEXTO       = new Color(241, 245, 249);
+public class PanelConfirmacion extends JPanel {
+
+    private static final Color FONDO = new Color(10, 10, 10);
+    private static final Color CARD = new Color(22, 22, 22);
+    private static final Color BORDE = new Color(55, 55, 55);
+    private static final Color TEXTO = new Color(241, 245, 249);
     private static final Color TEXTO_MUTED = new Color(148, 163, 184);
-    private static final Color BTN_ORO    = new Color(212, 160, 23);
-    private static final Color VERDE       = new Color(34, 197, 94);
+    private static final Color BTN_ORO = new Color(212, 160, 23);
+    private static final Color VERDE = new Color(34, 197, 94);
 
     private JPanel panelDetalle;
-
     private final ControlVistas control;
 
     public PanelConfirmacion(ControlVistas control) {
@@ -46,7 +46,6 @@ public class PanelConfirmacion extends JPanel{
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setPreferredSize(new Dimension(540, 500));
 
-        // Top bar con logo
         JPanel topBar = new JPanel(new BorderLayout());
         topBar.setBackground(CARD);
         topBar.setBorder(BorderFactory.createEmptyBorder(15, 20, 10, 20));
@@ -55,7 +54,6 @@ public class PanelConfirmacion extends JPanel{
         lblLogo.setForeground(TEXTO_MUTED);
         topBar.add(lblLogo, BorderLayout.EAST);
 
-        // Icono éxito
         JPanel panelIcono = new JPanel(new GridBagLayout());
         panelIcono.setBackground(CARD);
         panelIcono.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
@@ -82,23 +80,34 @@ public class PanelConfirmacion extends JPanel{
         sep.setForeground(BORDE);
         sep.setMaximumSize(new Dimension(500, 1));
 
-        // Detalle de la cita
         panelDetalle = new JPanel(new GridLayout(0, 2, 10, 8));
         panelDetalle.setBackground(CARD);
         panelDetalle.setBorder(BorderFactory.createEmptyBorder(12, 30, 12, 30));
         panelDetalle.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
 
-        // Botones
-        JButton btnOtra  = boton("Agendar otra cita");
+        JButton btnOtra = boton("Agendar otra cita");
         JButton btnMisCitas = botonSecundario("Ver mis citas");
         btnOtra.setAlignmentX(CENTER_ALIGNMENT);
         btnOtra.setMaximumSize(new Dimension(480, 42));
         btnMisCitas.setAlignmentX(CENTER_ALIGNMENT);
 
-        btnOtra.addActionListener(e ->
-                control.mostrar(ControlVistas.pantallaBarberias));
-        btnMisCitas.addActionListener(e ->
-                control.mostrar(ControlVistas.pantallaMisCitas));
+        btnOtra.addActionListener(e -> {
+            if (GestorSesion.haySesion()
+                    && GestorSesion.getClienteActivo().getRol() == dto.enums.RolUsuario.BARBERO) {
+                control.mostrar(ControlVistas.pantallaMenuAdmin);
+            } else {
+                control.mostrar(ControlVistas.pantallaBarberias);
+            }
+        });
+
+        btnMisCitas.addActionListener(e -> {
+            if (GestorSesion.haySesion()
+                    && GestorSesion.getClienteActivo().getRol() == dto.enums.RolUsuario.BARBERO) {
+                control.mostrar(ControlVistas.pantallaGestionarCitas);
+            } else {
+                control.mostrar(ControlVistas.pantallaMisCitas);
+            }
+        });
 
         card.add(topBar);
         card.add(panelIcono);
@@ -130,12 +139,14 @@ public class PanelConfirmacion extends JPanel{
     public void mostrarCita(CitaDTO cita) {
         panelDetalle.removeAll();
 
-        // Capturar la hora exacta en que se muestra la confirmacion
         String horaAgendado = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm")
                 .format(new java.util.Date());
         String textoPago = "";
         if (dto.enums.MetodoPago.EFECTIVO.equals(cita.getMetodoPago())) {
             textoPago = "Efectivo";
+        }
+        if (dto.enums.MetodoPago.TARJETA.equals(cita.getMetodoPago())) {
+            textoPago = "Tarjeta";
         }
         String textoTarjeta = "";
         if (numeroTarjetaMascarado != null) {
@@ -143,18 +154,20 @@ public class PanelConfirmacion extends JPanel{
         }
 
         String[][] datos = {
-            {"Nombre:",   cita.getCliente().getNombreCompleto()},
-            {"Correo:",   cita.getCliente().getCorreo()},
+            {"Nombre:", cita.getCliente().getNombreCompleto()},
+            {"Correo:", cita.getCliente().getCorreo()},
             {"Barberia:", cita.getBarberia().getNombre()},
             {"Servicio:", cita.getServicio().getNombre()},
             {"Fecha y hora:", cita.getFechaHora()},
-            {"Precio:",   "$" + String.format("%.2f", cita.getServicio().getPrecio())},
-            {"Pago:",     textoPago},
-            {"Tarjeta:",  textoTarjeta},
+            {"Precio:", "$" + String.format("%.2f", cita.getServicio().getPrecio())},
+            {"Pago:", textoPago},
+            {"Tarjeta:", textoTarjeta},
             {"Agendado:", horaAgendado}
         };
         for (String[] fila : datos) {
-            if (fila[1].isBlank()) continue; // no iniciar filas vacias
+            if (fila[1].isBlank()) {
+                continue;
+            }
             JLabel lbl = new JLabel(fila[0]);
             lbl.setFont(new Font("Comic Sans MS", Font.BOLD, 12));
             lbl.setForeground(TEXTO_MUTED);
@@ -166,25 +179,25 @@ public class PanelConfirmacion extends JPanel{
         }
         panelDetalle.revalidate();
         panelDetalle.repaint();
-
-        // El correo de confirmacion se envia automaticamente dentro de AgendarCita
-        // al momento de guardar la cita. No es necesario enviarlo aqui.
     }
 
     private JButton boton(String t) {
         JButton b = new JButton(t);
-        b.setBackground(BTN_ORO); b.setForeground(TEXTO);
+        b.setBackground(BTN_ORO);
+        b.setForeground(TEXTO);
         b.setOpaque(true);
         b.setFont(new Font("Comic Sans MS", Font.BOLD, 14));
         b.setBorder(BorderFactory.createEmptyBorder(8, 22, 8, 22));
         b.setFocusPainted(false);
-        b.setBorderPainted(false); b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        b.setBorderPainted(false);
+        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return b;
     }
 
     private JButton botonSecundario(String t) {
         JButton b = new JButton(t);
-        b.setBackground(CARD); b.setForeground(TEXTO_MUTED);
+        b.setBackground(CARD);
+        b.setForeground(TEXTO_MUTED);
         b.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
         b.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
         b.setFocusPainted(false);
@@ -192,5 +205,4 @@ public class PanelConfirmacion extends JPanel{
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return b;
     }
-
 }

@@ -236,8 +236,6 @@ public class PanelRegistroCuenta extends JPanel {
                     "Bienvenido, " + creado.getNombre() + "!",
                     "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
             if (rol == RolUsuario.BARBERO) {
-                PanelMenuAdmin panelAdmin = control.getPanel(ControlVistas.pantallaMenuAdmin);
-                panelAdmin.actualizarAdmin(creado);
                 control.mostrar(ControlVistas.pantallaMenuAdmin);
             } else {
                 control.mostrar(ControlVistas.pantallaBarberias);

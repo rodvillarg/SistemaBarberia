@@ -142,12 +142,15 @@ public class CitaBO implements ICitaBO {
         for (Cita c : citaDAO.buscarPorCliente(oid)) {
             Barberia barberia = barberiaDAO.buscarPorId(c.getIdBarberia());
             Servicio servicio = servicioDAO.buscarPorId(c.getIdServicio());
+            if (barberia == null || servicio == null) {
+                continue;
+            }
             resultado.add(citaMapper.toDTO(c,
                     clienteDTO,
                     barberiaMapper.toDTO(barberia),
                     servicioMapper.toDTO(servicio)));
-        }
-
+        } 
+        
         // Auto-completar citas vencidas
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
         LocalDateTime ahora = LocalDateTime.now();

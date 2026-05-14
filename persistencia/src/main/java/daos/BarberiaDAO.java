@@ -66,6 +66,8 @@ public class BarberiaDAO implements IBarberiaDAO {
     
     @Override
     public Barberia buscarPorIdBarbero(String idBarbero) {
-        return coleccion.find(eq("idBarbero", idBarbero)).first();
+        Barberia result = coleccion.find(
+                eq("idBarbero", new ObjectId(idBarbero))).first();
+        return result;
     }
 }

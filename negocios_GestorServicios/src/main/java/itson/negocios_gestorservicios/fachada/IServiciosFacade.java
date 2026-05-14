@@ -14,6 +14,7 @@ import java.util.List;
 public interface IServiciosFacade {
     
     ServicioDTO registrar(ServicioDTO servicio);
+
     
     List<ServicioDTO> obtenerServiciosPorBarberia(String barberiaId);
 

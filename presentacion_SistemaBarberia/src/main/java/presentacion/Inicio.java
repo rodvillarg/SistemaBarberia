@@ -38,17 +38,16 @@ public class Inicio {
             PanelSeleccionFechaHora panelFechaHora         = new PanelSeleccionFechaHora(control);
             PanelConfirmacion       panelConfirmacion      = new PanelConfirmacion(control);
             PanelMisCitas           panelMisCitas          = new PanelMisCitas(control);
-            PanelMenuAdmin          panelMenuAdmin         = new PanelMenuAdmin(control, new ClienteDTO());
-            PanelGestionCitas       panelGestionCitas      = new PanelGestionCitas(control);
-            PanelAdminGestionCitas  panelAdminGestion      = new PanelAdminGestionCitas(control);
+            PanelMenuAdmin          panelMenuAdmin         = new PanelMenuAdmin(control);
+            PanelGestionarCitas     panelGestionCitas      = new PanelGestionarCitas(control);
             PanelRegistroBarberia   panelRegBarberia       = new PanelRegistroBarberia(control);
             PanelConfirmarCita      panelConfirmarCita     = new PanelConfirmarCita(control);
             PanelInfoBarberia       panelInfoBarberia      = new PanelInfoBarberia(control);
             PanelRegistroCuenta     panelRegCuenta         = new PanelRegistroCuenta(control);
             PanelPagoTarjeta        panelPagoTarjeta       = new PanelPagoTarjeta(control);
             PanelResenas            panelResenas           = new PanelResenas(control);
-            PanelGestionarMisCitas  panelGestionarMisCitas = new PanelGestionarMisCitas(control);
             PanelAsignarHorario     panelAsignarHorario    = new PanelAsignarHorario(control);
+            PanelGestionarServicios panelGestionarServicios = new PanelGestionarServicios(control);
 
             control.registrarPanel(ControlVistas.pantallaLogin,           panelLogin);
             control.registrarPanel(ControlVistas.pantallaRegistro,        panelRegistro);
@@ -58,17 +57,16 @@ public class Inicio {
             control.registrarPanel(ControlVistas.pantallaConfirmacion,    panelConfirmacion);
             control.registrarPanel(ControlVistas.pantallaMisCitas,       panelMisCitas);
             control.registrarPanel(ControlVistas.pantallaMenuAdmin,      panelMenuAdmin);
-            control.registrarPanel(ControlVistas.pantallaGestionCitas,   panelGestionCitas);
-            control.registrarPanel(ControlVistas.pantallaAdminGestionCitas,   panelAdminGestion);
+            control.registrarPanel(ControlVistas.pantallaGestionarCitas, panelGestionCitas);
             control.registrarPanel(ControlVistas.pantallaRegBarberia,    panelRegBarberia);
             control.registrarPanel(ControlVistas.pantallaConfirmarCita,  panelConfirmarCita);
             control.registrarPanel(ControlVistas.pantallaInfoBarberia,   panelInfoBarberia);
             control.registrarPanel(ControlVistas.pantallaRegistroCuenta, panelRegCuenta);
             control.registrarPanel(ControlVistas.pantallaPagoTarjeta,    panelPagoTarjeta);
             control.registrarPanel(ControlVistas.pantallaResenas,         panelResenas);
-            control.registrarPanel(ControlVistas.pantallaGestionarMisCitas, panelGestionarMisCitas);
             control.registrarPanel(ControlVistas.pantallaAsignarHorario, panelAsignarHorario);
-
+            control.registrarPanel(ControlVistas.pantallaGestionarServicios, panelGestionarServicios);
+            
             control.mostrar(ControlVistas.pantallaLogin);
             control.iniciar();
 
@@ -82,15 +80,70 @@ public class Inicio {
                 @Override public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
                 @Override public void ancestorMoved(javax.swing.event.AncestorEvent e)   {}
             });
-            panelGestionCitas.addAncestorListener(new javax.swing.event.AncestorListener() {
-                @Override public void ancestorAdded(javax.swing.event.AncestorEvent e) {
+            
+            panelMenuAdmin.addAncestorListener(new javax.swing.event.AncestorListener() {
+                @Override
+                public void ancestorAdded(javax.swing.event.AncestorEvent e) {
                     if (presentacion.utilerias.GestorSesion.haySesion()) {
-                        panelGestionCitas.cargarCitas(
+                        panelMenuAdmin.actualizarAdmin(
                                 presentacion.utilerias.GestorSesion.getClienteActivo());
                     }
                 }
-                @Override public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
-                @Override public void ancestorMoved(javax.swing.event.AncestorEvent e)   {}
+
+                @Override
+                public void ancestorRemoved(javax.swing.event.AncestorEvent e) {
+                }
+
+                @Override
+                public void ancestorMoved(javax.swing.event.AncestorEvent e) {
+                }
+            });
+            
+            panelGestionCitas.addAncestorListener(new javax.swing.event.AncestorListener() {
+                @Override
+                public void ancestorAdded(javax.swing.event.AncestorEvent e) {
+                    if (presentacion.utilerias.GestorSesion.haySesion()) {
+                        panelGestionCitas.cargarCitas();
+                    }
+                }
+
+                @Override
+                public void ancestorRemoved(javax.swing.event.AncestorEvent e) {
+                }
+
+                @Override
+                public void ancestorMoved(javax.swing.event.AncestorEvent e) {
+                }
+            });
+
+            panelGestionarServicios.addAncestorListener(new javax.swing.event.AncestorListener() {
+                @Override
+                public void ancestorAdded(javax.swing.event.AncestorEvent e) {
+                    panelGestionarServicios.refrescar();
+                }
+
+                @Override
+                public void ancestorRemoved(javax.swing.event.AncestorEvent e) {
+                }
+
+                @Override
+                public void ancestorMoved(javax.swing.event.AncestorEvent e) {
+                }
+            });
+
+            panelAsignarHorario.addAncestorListener(new javax.swing.event.AncestorListener() {
+                @Override
+                public void ancestorAdded(javax.swing.event.AncestorEvent e) {
+                    panelAsignarHorario.refrescar();
+                }
+
+                @Override
+                public void ancestorRemoved(javax.swing.event.AncestorEvent e) {
+                }
+
+                @Override
+                public void ancestorMoved(javax.swing.event.AncestorEvent e) {
+                }
             });
         });
     }

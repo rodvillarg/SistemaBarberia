@@ -23,16 +23,15 @@ public class ControlVistas {
     public static final String pantallaConfirmacion = "confirmacion";
     public static final String pantallaMisCitas = "misCitas";
     public static final String pantallaMenuAdmin = "menuAdmin";
-    public static final String pantallaGestionCitas = "gestionCitas";
+    public static final String pantallaGestionarCitas = "gestionarCitas";
     public static final String pantallaRegBarberia = "regBarberia";
-    public static final String pantallaAdminGestionCitas = "adminGestionCitas";
     public static final String pantallaConfirmarCita = "confirmarCita";
     public static final String pantallaInfoBarberia = "infoBarberia";
     public static final String pantallaRegistroCuenta = "registroCuenta";
     public static final String pantallaPagoTarjeta = "pagoTarjeta";
     public static final String pantallaResenas = "resenas";
-    public static final String pantallaGestionarMisCitas = "gestionarMisCitas";
     public static final String pantallaAsignarHorario = "asignarHorario";
+    public static final String pantallaGestionarServicios = "gestionarServicios";
 
     public ControlVistas() {
         this.ventana = new VentanaPrincipal();

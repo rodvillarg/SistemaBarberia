@@ -165,8 +165,6 @@ public class PanelInicioSesion extends JPanel {
             txtUsuario.setText("");
             txtContrasena.setText("");
             if (facadeLogin.esBarbero(cliente)) {
-                control.<PanelMenuAdmin>getPanel(ControlVistas.pantallaMenuAdmin)
-                        .actualizarAdmin(cliente);
                 control.mostrar(ControlVistas.pantallaMenuAdmin);
             } else {
                 control.mostrar(ControlVistas.pantallaBarberias);

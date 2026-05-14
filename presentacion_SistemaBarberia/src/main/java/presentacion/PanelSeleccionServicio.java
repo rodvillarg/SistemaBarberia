@@ -16,6 +16,8 @@ import javax.swing.SwingConstants;
 import presentacion.mediadores.IServicioMediator;
 import presentacion.mediadores.ServicioMediator;
 import presentacion.controles.ControlVistas;
+import presentacion.mediadores.BarberiaMediator;
+import presentacion.mediadores.IBarberiaMediator;
 
 /**
  *
@@ -32,15 +34,21 @@ public class PanelSeleccionServicio extends JPanel{
     private static final Color HOVER       = new Color(42, 42, 42);
     
     private final IServicioMediator mediadorServicio = new ServicioMediator();
+    private final IBarberiaMediator mediadorBarberia = new BarberiaMediator();
 
     private JPanel panelLista;
     private BarberiaDTO barberiaActual;
+    private String pantallaOrigen = ControlVistas.pantallaInfoBarberia;
 
     private final ControlVistas control;
 
     public PanelSeleccionServicio(ControlVistas control) {
         this.control = control;
         initUI();
+    }
+    
+    public void setPantallaOrigen(String pantallaOrigen) {
+        this.pantallaOrigen = pantallaOrigen;
     }
 
     private void initUI() {
@@ -85,8 +93,8 @@ public class PanelSeleccionServicio extends JPanel{
                 BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(55, 55, 55)),
                 BorderFactory.createEmptyBorder(10, 20, 10, 20)));
         JButton btnVolver = botonHeader("Regresar");
-        btnVolver.addActionListener(e ->
-                control.mostrar(ControlVistas.pantallaInfoBarberia));
+        btnVolver.addActionListener(e -> control.mostrar(pantallaOrigen));
+        
         footer.add(btnVolver, BorderLayout.WEST);
 
         add(topBar, BorderLayout.NORTH);
@@ -112,6 +120,17 @@ public class PanelSeleccionServicio extends JPanel{
         }
         panelLista.revalidate();
         panelLista.repaint();
+    }
+    
+    public void cargarServiciosPorId(String idBarberia) {
+        try {
+            BarberiaDTO barberia = mediadorBarberia.obtenerPorId(idBarberia);
+            cargarServicios(barberia);
+        } catch (exceptions.BarberiaNoEncontradaException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró la barbería.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private JPanel crearFila(ServicioDTO servicio) {

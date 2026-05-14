@@ -21,6 +21,8 @@ import java.util.List;
 import javax.swing.*;
 import presentacion.mediadores.CitaMediator;
 import presentacion.mediadores.ICitaMediator;
+import presentacion.mediadores.BarberiaMediator;
+import presentacion.mediadores.IBarberiaMediator;
 import presentacion.controles.ControlVistas;
 import presentacion.utilerias.GestorSesion;
 
@@ -28,7 +30,7 @@ import presentacion.utilerias.GestorSesion;
  *
  * @author Jesus Rodrigo Villegas - 261186
  */
-public class PanelGestionarMisCitas extends JPanel{
+public class PanelGestionarCitas extends JPanel{
     private static final Color FONDO       = new Color(10, 10, 10);
     private static final Color CARD        = new Color(22, 22, 22);
     private static final Color BORDE       = new Color(55, 55, 55);
@@ -40,12 +42,15 @@ public class PanelGestionarMisCitas extends JPanel{
     private static final Color AMARILLO    = new Color(234, 179, 8);
 
     private JPanel panelLista;
+    private JLabel lblTitulo;
+    private String pantallaOrigen = ControlVistas.pantallaMisCitas;
     
     private final ICitaMediator mediadorCita = new CitaMediator();
+    private final IBarberiaMediator mediadorBarberia = new BarberiaMediator();
     
     private final ControlVistas control;
 
-    public PanelGestionarMisCitas(ControlVistas control) {
+    public PanelGestionarCitas(ControlVistas control) {
         this.control = control;
         initUI();
     }
@@ -58,7 +63,7 @@ public class PanelGestionarMisCitas extends JPanel{
         topBar.setBackground(new Color(15, 15, 15));
         topBar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JLabel lblTitulo = new JLabel("GESTIONAR MIS CITAS");
+        lblTitulo = new JLabel("GESTIONAR MIS CITAS");
         lblTitulo.setFont(new Font("Comic Sans MS", Font.BOLD, 18));
         lblTitulo.setForeground(TEXTO);
 
@@ -99,8 +104,7 @@ public class PanelGestionarMisCitas extends JPanel{
         btnVolver.setBorderPainted(false);
         btnVolver.setOpaque(true);
         btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnVolver.addActionListener(e ->
-                control.mostrar(ControlVistas.pantallaMisCitas));
+        btnVolver.addActionListener(e -> control.mostrar(pantallaOrigen));
 
         footer.add(btnVolver, BorderLayout.WEST);
 
@@ -110,41 +114,91 @@ public class PanelGestionarMisCitas extends JPanel{
     }
 
     public void cargarCitas() {
-        panelLista.removeAll();
-        if (!GestorSesion.haySesion()) return;
+        if (!GestorSesion.haySesion()) {
+            return;
+        }
 
-        ClienteDTO sesion = GestorSesion.getClienteActivo();
-        try {
-            List<CitaDTO> citas = mediadorCita
-                        .obtenerCitasPorCliente(sesion.getId());
-
-            if (citas.isEmpty()) {
-                JLabel lbl = new JLabel("No tienes citas agendadas aún.");
-                lbl.setFont(new Font("Comic Sans MS", Font.ITALIC, 14));
-                lbl.setForeground(TEXTO_MUTED);
-                panelLista.add(lbl);
-            } else {
-                java.time.format.DateTimeFormatter fmt =
-                        java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
-                citas.sort((a, b) -> {
-                    try {
-                        java.time.LocalDateTime fa = java.time.LocalDateTime.parse(a.getFechaHora(), fmt);
-                        java.time.LocalDateTime fb = java.time.LocalDateTime.parse(b.getFechaHora(), fmt);
-                        return fb.compareTo(fa);
-                    } catch (Exception e) { return 0; }
-                });
-                for (CitaDTO c : citas) {
-                    panelLista.add(crearCard(c));
-                    panelLista.add(Box.createVerticalStrut(10));
-                }
+        if (GestorSesion.getClienteActivo().getRol() == dto.enums.RolUsuario.BARBERO) {
+            try {
+                String idBarberia = mediadorBarberia
+                        .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
+                        .getId();
+                cargarCitasPorBarberia(idBarberia);
+            } catch (Exception ex) {
             }
-        } catch (ClienteNoEncontradoException ex) {
-            JLabel lbl = new JLabel("Error al cargar citas: " + ex.getMessage());
-            lbl.setForeground(ROJO);
+        } else {
+            panelLista.removeAll();
+            lblTitulo.setText("GESTIONAR MIS CITAS");
+            this.pantallaOrigen = ControlVistas.pantallaMisCitas;
+            ClienteDTO sesion = GestorSesion.getClienteActivo();
+            try {
+                List<CitaDTO> citas = mediadorCita.obtenerCitasPorCliente(sesion.getId());
+                mostrarCitas(citas);
+            } catch (exceptions.ClienteNoEncontradoException ex) {
+                JLabel lbl = new JLabel("Error al cargar citas: " + ex.getMessage());
+                lbl.setForeground(ROJO);
+                panelLista.add(lbl);
+            }
+            panelLista.revalidate();
+            panelLista.repaint();
+        }
+    }
+    
+    public void cargarCitasPorBarberia(String idBarberia) {
+        panelLista.removeAll();
+        lblTitulo.setText("GESTIÓN DE CITAS");
+        this.pantallaOrigen = ControlVistas.pantallaMenuAdmin;
+
+        List<CitaDTO> citas = mediadorCita.obtenerCitasPorBarberia(idBarberia);
+        if (citas.isEmpty()) {
+            JLabel lbl = new JLabel("No hay citas registradas.");
+            lbl.setFont(new Font("Comic Sans MS", Font.ITALIC, 14));
+            lbl.setForeground(TEXTO_MUTED);
             panelLista.add(lbl);
+        } else {
+            java.time.format.DateTimeFormatter fmt
+                    = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
+            citas.sort((a, b) -> {
+                try {
+                    java.time.LocalDateTime fa = java.time.LocalDateTime.parse(a.getFechaHora(), fmt);
+                    java.time.LocalDateTime fb = java.time.LocalDateTime.parse(b.getFechaHora(), fmt);
+                    return fb.compareTo(fa);
+                } catch (Exception e) {
+                    return 0;
+                }
+            });
+            for (CitaDTO c : citas) {
+                panelLista.add(crearCard(c));
+                panelLista.add(Box.createVerticalStrut(10));
+            }
         }
         panelLista.revalidate();
         panelLista.repaint();
+    }
+    
+    private void mostrarCitas(List<CitaDTO> citas) {
+        if (citas.isEmpty()) {
+            JLabel lbl = new JLabel("No tienes citas agendadas aún.");
+            lbl.setFont(new Font("Comic Sans MS", Font.ITALIC, 14));
+            lbl.setForeground(TEXTO_MUTED);
+            panelLista.add(lbl);
+            return;
+        }
+        java.time.format.DateTimeFormatter fmt
+                = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
+        citas.sort((a, b) -> {
+            try {
+                java.time.LocalDateTime fa = java.time.LocalDateTime.parse(a.getFechaHora(), fmt);
+                java.time.LocalDateTime fb = java.time.LocalDateTime.parse(b.getFechaHora(), fmt);
+                return fb.compareTo(fa);
+            } catch (Exception e) {
+                return 0;
+            }
+        });
+        for (CitaDTO c : citas) {
+            panelLista.add(crearCard(c));
+            panelLista.add(Box.createVerticalStrut(10));
+        }
     }
 
     private JPanel crearCard(CitaDTO cita) {
@@ -245,23 +299,30 @@ public class PanelGestionarMisCitas extends JPanel{
         btnCancelar.setVisible(cita.getEstado() == EstadoCita.CONFIRMADA);
 
         btnCancelar.addActionListener(e -> {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Estás seguro que deseas cancelar esta cita?",
-                "Cancelar cita", JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                mediadorCita.cancelarCita(cita.getId());
-                control.<PanelSeleccionFechaHora>getPanel(ControlVistas.pantallaFechaHora).refrescarSlots();
-                cargarCitas();
-            } catch (exceptions.CitaYaCanceladaException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "Esta cita ya fue cancelada anteriormente.",
-                        "Aviso", JOptionPane.WARNING_MESSAGE);
-                cargarCitas();
-        }
-    }
-});
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Estás seguro que deseas cancelar esta cita?",
+                    "Cancelar cita", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    mediadorCita.cancelarCita(cita.getId());
+                    control.<PanelSeleccionFechaHora>getPanel(
+                            ControlVistas.pantallaFechaHora).refrescarSlots();
+                } catch (exceptions.CitaYaCanceladaException ex) {
+                    JOptionPane.showMessageDialog(this,
+                            "Esta cita ya fue cancelada anteriormente.",
+                            "Aviso", JOptionPane.WARNING_MESSAGE);
+                }
+                if (ControlVistas.pantallaMenuAdmin.equals(pantallaOrigen)) {
+                    String idBarberia = mediadorBarberia
+                            .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
+                            .getId();
+                    cargarCitasPorBarberia(idBarberia);
+                } else {
+                    cargarCitas();
+                }
+            }
+        });
 
         der.add(lblEstado);
         der.add(btnCancelar);
