@@ -222,6 +222,8 @@ public class PanelInfoBarberia extends JPanel {
         btnApartar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnApartar.addActionListener(e -> {
             control.<PanelSeleccionServicio>getPanel(ControlVistas.pantallaServicios)
+                    .setPantallaOrigen(ControlVistas.pantallaInfoBarberia);
+            control.<PanelSeleccionServicio>getPanel(ControlVistas.pantallaServicios)
                     .cargarServicios(barberiaActual);
             control.mostrar(ControlVistas.pantallaServicios);
         });
