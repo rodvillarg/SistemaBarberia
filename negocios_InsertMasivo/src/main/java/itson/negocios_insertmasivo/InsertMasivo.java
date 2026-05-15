@@ -21,6 +21,7 @@ import interfaces.IBarberiaBO;
 import interfaces.IClienteBO;
 import interfaces.IHorarioBO;
 import interfaces.IServicioBO;
+import interfaces.IResenaBO;
 
 /**
  *
@@ -31,7 +32,7 @@ public class InsertMasivo implements IInsertMasivo {
     private final IServicioBO servicioBO;
     private final IClienteBO  clienteBO;
     private final IHorarioBO  horarioBO;
-    private final ResenaBO    resenaBO;
+    private final IResenaBO   resenaBO;
 
     public InsertMasivo() {
         this.barberiaBO = new BarberiaBO();
@@ -289,7 +290,8 @@ public class InsertMasivo implements IInsertMasivo {
                     RolUsuario.CLIENTE));
             System.out.println("[InsertMasivo] Cliente de prueba  -> usuario: prueba | contraseña: 1234");
         } catch (UsuarioDuplicadoException e) {
-            // Ya existe, no hacer nada
+            e.printStackTrace();
+            System.err.println("Error durante la inserción masiva: " + e.getMessage());
         }
         // Admin: si ya existe pero con rol incorrecto, lo actualiza
         insertarOActualizarAdmin();

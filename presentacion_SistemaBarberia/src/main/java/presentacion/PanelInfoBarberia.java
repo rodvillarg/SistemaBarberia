@@ -174,8 +174,14 @@ public class PanelInfoBarberia extends JPanel {
         btnResenas.setOpaque(true);
         btnResenas.setAlignmentX(LEFT_ALIGNMENT);
         btnResenas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnResenas.addActionListener(e ->
-                control.mostrar(ControlVistas.pantallaResenas));
+        btnResenas.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                control.<PanelResenas>getPanel(ControlVistas.pantallaResenas)
+                        .setBarberia(barberiaActual);
+                control.mostrar(ControlVistas.pantallaResenas);
+            }
+        });
 
         seccion.add(filaHeader);
         seccion.add(cardsInfo);

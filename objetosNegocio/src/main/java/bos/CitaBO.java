@@ -236,6 +236,17 @@ public class CitaBO implements ICitaBO {
                     barberiaMapper.toDTO(barberia),
                     servicioMapper.toDTO(servicio)));
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
+        LocalDateTime ahora = LocalDateTime.now();
+        for (CitaDTO c : resultado) {
+            if (c.getEstado() == EstadoCita.CONFIRMADA) {
+                LocalDateTime fechaCita = LocalDateTime.parse(c.getFechaHora(), formatter);
+                if (fechaCita.isBefore(ahora)) {
+                    citaDAO.completarCita(new ObjectId(c.getId()));
+                    c.setEstado(EstadoCita.COMPLETADA);
+                }
+            }
+        }
         return resultado;
     }
 }

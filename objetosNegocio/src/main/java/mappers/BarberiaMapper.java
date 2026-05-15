@@ -34,8 +34,10 @@ public class BarberiaMapper {
         Barberia b = new Barberia();
         if (barberiaDTO.getId() != null && !barberiaDTO.getId().isBlank()) {
             try {
-                b.setId(new ObjectId(barberiaDTO.getId()));
+                b.setIdBarbero(new ObjectId(barberiaDTO.getIdBarbero()));
             } catch (IllegalArgumentException e) {
+                b.setIdBarbero(null);
+                e.printStackTrace();
             }
         }
         b.setNombre(barberiaDTO.getNombre());

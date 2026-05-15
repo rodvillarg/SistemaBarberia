@@ -184,6 +184,18 @@ public class PanelRegistroBarberia extends JPanel {
  
 
     private void registrar() {
+        if (!GestorSesion.haySesion()
+                || GestorSesion.getClienteActivo() == null
+                || GestorSesion.getClienteActivo().getId() == null) {
+
+            JOptionPane.showMessageDialog(this,
+                    "No hay una sesión activa.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+
+            control.mostrar(ControlVistas.pantallaLogin);
+            return;
+        }
         String nombre = txtNombre.getText().trim();
         String direccion = txtDireccion.getText().trim();
         String telefono = txtTelefono.getText().trim();

@@ -6,8 +6,8 @@ import exceptions.CredencialesInvalidasException;
 import exceptions.ClienteNoEncontradoException;
 import java.awt.*;
 import javax.swing.*;
-import itson.negocios_iniciosesion.IInicioSesionFachada;
-import itson.negocios_iniciosesion.InicioSesionFachada;
+import itson.negocios_gestorclientes.fachada.ClientesFacade;
+import itson.negocios_gestorclientes.fachada.IClientesFacade;
 import presentacion.controles.ControlVistas;
 import presentacion.utilerias.GestorSesion;
 
@@ -18,7 +18,7 @@ import presentacion.utilerias.GestorSesion;
  */
 public class PanelInicioSesion extends JPanel {
     
-    private final IInicioSesionFachada facadeLogin = new InicioSesionFachada();
+    private final IClientesFacade facadeLogin = new ClientesFacade();
 
     private static final Color FONDO       = new Color(10, 10, 10);
     private static final Color CARD        = new Color(22, 22, 22);

@@ -4,12 +4,12 @@
  */
 package presentacion;
 
-import dto.ClienteDTO;
 import java.awt.Color;
 import javax.swing.SwingUtilities;
 import javax.swing.*;
 import presentacion.controles.ControlInsertMasivo;
 import presentacion.controles.ControlVistas;
+import javax.swing.JOptionPane;
 
 /**
  * @author Jesus Rodrigo Villegas - 261186
@@ -27,7 +27,13 @@ public class Inicio {
                 UIManager.put("control",           new Color(22, 22, 22));
                 UIManager.put("Button.background", new Color(22, 22, 22));
                 UIManager.put("Button.foreground", new Color(241, 245, 249));
-            } catch (Exception ignored) {}
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null,
+                        "Error al iniciar la aplicacion: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
 
             ControlVistas control = new ControlVistas();
 

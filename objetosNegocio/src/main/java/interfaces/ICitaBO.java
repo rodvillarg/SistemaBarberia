@@ -23,8 +23,8 @@ public interface ICitaBO {
 
     List<CitaDTO> obtenerCitasPorBarberia(String barberiaId);
 
-    void cancelarCita(String idCita);
-
+    void cancelarCita(String idCita) throws CitaNoEncontradaException;
+    
     CitaDTO obtenerPorId(String id) throws CitaNoEncontradaException;
 
     List<String> obtenerHorasOcupadas(String barberiaId, String fecha);

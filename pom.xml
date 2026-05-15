@@ -21,7 +21,6 @@
         <module>negocios_GestorClientes</module>
         <module>negocios_GestorCitas</module>
         <module>negocios_InsertMasivo</module>
-        <module>negocios_InicioSesion</module>
         <module>presentacion_SistemaBarberia</module>
         
     </modules>

@@ -71,40 +71,45 @@ public class PanelGestionarServicios extends JPanel {
     }
 
     private JPanel crearContenido() {
-        JPanel contenido = new JPanel();
+        JPanel contenido = new JPanel(new BorderLayout());
         contenido.setBackground(FONDO);
-        contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
         contenido.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
         // ── Lista de servicios ──
         JLabel lblServicios = new JLabel("Mis servicios");
         lblServicios.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
         lblServicios.setForeground(TEXTO_MUTED);
-        lblServicios.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contenido.add(lblServicios);
-        contenido.add(Box.createVerticalStrut(10));
 
         panelLista = new JPanel();
         panelLista.setLayout(new BoxLayout(panelLista, BoxLayout.Y_AXIS));
         panelLista.setBackground(FONDO);
-        panelLista.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contenido.add(panelLista);
 
-        JSeparator sep = new JSeparator();
-        sep.setForeground(new Color(30, 30, 30));
-        sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-        sep.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contenido.add(Box.createVerticalStrut(14));
-        contenido.add(sep);
-        contenido.add(Box.createVerticalStrut(14));
+        JScrollPane scroll = new JScrollPane(panelLista,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.getViewport().setBackground(FONDO);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+
+        JPanel parteLista = new JPanel(new BorderLayout());
+        parteLista.setBackground(FONDO);
+        parteLista.add(lblServicios, BorderLayout.NORTH);
+        parteLista.add(scroll, BorderLayout.CENTER);
 
         // ── Formulario agregar ──
+        JPanel parteFormulario = new JPanel();
+        parteFormulario.setLayout(new BoxLayout(parteFormulario, BoxLayout.Y_AXIS));
+        parteFormulario.setBackground(FONDO);
+        parteFormulario.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(1, 0, 0, 0, BORDE),
+                BorderFactory.createEmptyBorder(14, 0, 0, 0)));
+
         JLabel lblAgregar = new JLabel("Agregar nuevo servicio");
         lblAgregar.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
         lblAgregar.setForeground(TEXTO_MUTED);
         lblAgregar.setAlignmentX(Component.LEFT_ALIGNMENT);
-        contenido.add(lblAgregar);
-        contenido.add(Box.createVerticalStrut(10));
+        parteFormulario.add(lblAgregar);
+        parteFormulario.add(Box.createVerticalStrut(10));
 
         JPanel formRow = new JPanel(new GridLayout(1, 3, 12, 0));
         formRow.setBackground(FONDO);
@@ -112,7 +117,7 @@ public class PanelGestionarServicios extends JPanel {
         formRow.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         txtNombre = campo();
-        txtPrecio = campo();
+        txtPrecio = campoPrecio();
 
         SpinnerNumberModel modeloDuracion = new SpinnerNumberModel(30, 10, 30, 5);
         spinnerDuracion = new JSpinner(modeloDuracion);
@@ -126,6 +131,8 @@ public class PanelGestionarServicios extends JPanel {
         editor.getTextField().setForeground(TEXTO);
         editor.getTextField().setCaretColor(TEXTO);
         editor.getTextField().setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+        editor.getTextField().setEditable(false);
+
 
         JPanel colNombre = colForm("Nombre", txtNombre);
         JPanel colPrecio = colForm("Precio ($)", txtPrecio);
@@ -142,8 +149,8 @@ public class PanelGestionarServicios extends JPanel {
         formRow.add(colNombre);
         formRow.add(colPrecio);
         formRow.add(colDuracion);
-        contenido.add(formRow);
-        contenido.add(Box.createVerticalStrut(10));
+        parteFormulario.add(formRow);
+        parteFormulario.add(Box.createVerticalStrut(10));
 
         JButton btnAgregar = new JButton("+ Agregar servicio");
         btnAgregar.setBackground(BTN_ORO);
@@ -155,8 +162,16 @@ public class PanelGestionarServicios extends JPanel {
         btnAgregar.setOpaque(true);
         btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnAgregar.setAlignmentX(Component.LEFT_ALIGNMENT);
-        btnAgregar.addActionListener(e -> agregarServicio());
-        contenido.add(btnAgregar);
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                agregarServicio();
+            }
+        });
+        parteFormulario.add(btnAgregar);
+
+        contenido.add(parteLista, BorderLayout.CENTER);
+        contenido.add(parteFormulario, BorderLayout.SOUTH);
 
         return contenido;
     }
@@ -311,7 +326,7 @@ public class PanelGestionarServicios extends JPanel {
     private void agregarServicio() {
         String nombre = txtNombre.getText().trim();
         String precio = txtPrecio.getText().trim();
-        int duracion  = (int) spinnerDuracion.getValue();
+        int duracion = (int) spinnerDuracion.getValue();
 
         if (nombre.isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -319,6 +334,14 @@ public class PanelGestionarServicios extends JPanel {
                     "Campo incompleto", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
+        if (nombre.length() > 50) {
+            JOptionPane.showMessageDialog(this,
+                    "El nombre no puede tener más de 50 caracteres.",
+                    "Nombre muy largo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         if (precio.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "El precio es obligatorio.",
@@ -328,11 +351,24 @@ public class PanelGestionarServicios extends JPanel {
 
         double precioDouble;
         try {
-            precioDouble = Double.parseDouble(precio);
-            if (precioDouble <= 0) throw new NumberFormatException();
+            precioDouble = Double.parseDouble(precio.replace(",", "."));
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this,
-                    "El precio debe ser un número mayor a 0.",
+                    "El precio debe ser un número válido.",
+                    "Precio inválido", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (precioDouble <= 0) {
+            JOptionPane.showMessageDialog(this,
+                    "El precio debe ser mayor a 0.",
+                    "Precio inválido", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (precioDouble > 99999) {
+            JOptionPane.showMessageDialog(this,
+                    "El precio no puede ser mayor a $99,999.",
                     "Precio inválido", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -360,17 +396,6 @@ public class PanelGestionarServicios extends JPanel {
         cargarServicios();
     }
 
-    private String obtenerIdBarberia() {
-        if (!GestorSesion.haySesion()) return null;
-        try {
-            return facadeBarberia
-                    .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
-                    .getId();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     private JTextField campo() {
         JTextField f = new JTextField();
         f.setBackground(CARD);
@@ -380,5 +405,32 @@ public class PanelGestionarServicios extends JPanel {
         f.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
         f.setPreferredSize(new Dimension(Integer.MAX_VALUE, 30));
         return f;
+    }
+
+    private JTextField campoPrecio() {
+        JTextField f = campo();
+        f.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '.' && c != ',') {
+                    e.consume();
+                }
+            }
+        });
+        return f;
+    }
+    
+    private String obtenerIdBarberia() {
+        if (!GestorSesion.haySesion()) {
+            return null;
+        }
+        try {
+            return facadeBarberia
+                    .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
+                    .getId();
+        } catch (Exception e) {
+            return null;
+        }
     }
 } 

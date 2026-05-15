@@ -124,6 +124,11 @@ public class PanelGestionarCitas extends JPanel{
                         .getId();
                 cargarCitasPorBarberia(idBarberia);
             } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "No se pudieron cargar las citas de la barberia.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } else {
             panelLista.removeAll();
@@ -157,13 +162,17 @@ public class PanelGestionarCitas extends JPanel{
         } else {
             java.time.format.DateTimeFormatter fmt
                     = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
-            citas.sort((a, b) -> {
-                try {
-                    java.time.LocalDateTime fa = java.time.LocalDateTime.parse(a.getFechaHora(), fmt);
-                    java.time.LocalDateTime fb = java.time.LocalDateTime.parse(b.getFechaHora(), fmt);
-                    return fb.compareTo(fa);
-                } catch (Exception e) {
-                    return 0;
+            citas.sort(new java.util.Comparator<CitaDTO>() {
+                @Override
+                public int compare(CitaDTO a, CitaDTO b) {
+                    try {
+                        java.time.LocalDateTime fa = java.time.LocalDateTime.parse(a.getFechaHora(), fmt);
+                        java.time.LocalDateTime fb = java.time.LocalDateTime.parse(b.getFechaHora(), fmt);
+                        return fb.compareTo(fa);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        return 0;
+                    }
                 }
             });
             for (CitaDTO c : citas) {
@@ -185,13 +194,16 @@ public class PanelGestionarCitas extends JPanel{
         }
         java.time.format.DateTimeFormatter fmt
                 = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
-        citas.sort((a, b) -> {
-            try {
-                java.time.LocalDateTime fa = java.time.LocalDateTime.parse(a.getFechaHora(), fmt);
-                java.time.LocalDateTime fb = java.time.LocalDateTime.parse(b.getFechaHora(), fmt);
-                return fb.compareTo(fa);
-            } catch (Exception e) {
-                return 0;
+        citas.sort(new java.util.Comparator<CitaDTO>() {
+            @Override
+            public int compare(CitaDTO a, CitaDTO b) {
+                try {
+                    java.time.LocalDateTime fa = java.time.LocalDateTime.parse(a.getFechaHora(), fmt);
+                    java.time.LocalDateTime fb = java.time.LocalDateTime.parse(b.getFechaHora(), fmt);
+                    return fb.compareTo(fa);
+                } catch (Exception e) {
+                    return 0;
+                }
             }
         });
         for (CitaDTO c : citas) {

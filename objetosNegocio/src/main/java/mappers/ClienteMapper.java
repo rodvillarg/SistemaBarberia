@@ -34,6 +34,8 @@ public class ClienteMapper {
             try {
                 cliente.setId(new ObjectId(clienteDTO.getId()));
             } catch (IllegalArgumentException e) {
+                    cliente.setId(null);
+                    e.printStackTrace();
             }
         }
         cliente.setNombre(clienteDTO.getNombre());

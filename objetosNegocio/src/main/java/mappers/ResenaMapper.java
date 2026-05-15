@@ -44,7 +44,8 @@ public class ResenaMapper {
             try {
                 resena.setId(new ObjectId(dto.getId()));
             } catch (IllegalArgumentException e) {
-
+                resena.setId(null);
+                e.printStackTrace();
             }
         }
 

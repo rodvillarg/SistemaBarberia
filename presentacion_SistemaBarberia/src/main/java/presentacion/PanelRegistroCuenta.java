@@ -115,7 +115,6 @@ public class PanelRegistroCuenta extends JPanel {
         g.gridy = 7; g.insets = new Insets(1, 0, 6, 0);
         rbCliente = new JRadioButton("Cliente");
         rbBarbero = new JRadioButton("Barbero / Dueno de barberia");
-        rbCliente.setSelected(true);
         for (JRadioButton rb : new JRadioButton[]{rbCliente, rbBarbero}) {
             rb.setBackground(CARD);
             rb.setForeground(TEXTO_MUTED);
@@ -222,6 +221,12 @@ public class PanelRegistroCuenta extends JPanel {
             java.util.Arrays.fill(confirmar, '\0');
             return;
         }
+        if (!rbCliente.isSelected() && !rbBarbero.isSelected()) {
+            JOptionPane.showMessageDialog(this,
+                    "Selecciona un tipo de cuenta.",
+                    "Campo requerido", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         RolUsuario rol = rbBarbero.isSelected() ? RolUsuario.BARBERO : RolUsuario.CLIENTE;
         datosPaso1.setUsuario(usuario);
         // Convertir a String solo para pasarlo al DTO — el BO lo hashea con BCrypt
@@ -250,7 +255,8 @@ public class PanelRegistroCuenta extends JPanel {
         txtUsuario.setText("");
         txtContrasena.setText("");
         txtConfirmar.setText("");
-        rbCliente.setSelected(true);
+        rbCliente.setSelected(false);
+        rbBarbero.setSelected(false);
     }
 
     private JTextField campo() {

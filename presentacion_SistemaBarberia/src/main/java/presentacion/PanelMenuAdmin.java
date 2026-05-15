@@ -34,7 +34,8 @@ public class PanelMenuAdmin extends JPanel {
     public PanelMenuAdmin(ControlVistas control) {
         this.control = control;
         this.facadeBarberia = new BarberiasFacade();
-        initUI();
+        setBackground(FONDO);
+        setLayout(new BorderLayout());
     }
 
     public void actualizarAdmin(ClienteDTO admin) {
@@ -161,6 +162,10 @@ public class PanelMenuAdmin extends JPanel {
                 control.<PanelGestionarCitas>getPanel(ControlVistas.pantallaGestionarCitas)
                         .cargarCitasPorBarberia(idBarberia);
             } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar la información: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
             control.mostrar(ControlVistas.pantallaGestionarCitas);
         });
@@ -175,6 +180,12 @@ public class PanelMenuAdmin extends JPanel {
                 control.<PanelSeleccionServicio>getPanel(ControlVistas.pantallaServicios)
                         .setPantallaOrigen(ControlVistas.pantallaMenuAdmin);
             } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "Error al cargar servicios: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
             }
             control.mostrar(ControlVistas.pantallaServicios);
         });
@@ -186,9 +197,11 @@ public class PanelMenuAdmin extends JPanel {
         });
 
         btnServicios.addActionListener(e -> control.mostrar(ControlVistas.pantallaGestionarServicios));
-        btnResenas.addActionListener(e -> {
+        btnResenas.addActionListener((java.awt.event.ActionEvent e) -> {
             control.<PanelResenas>getPanel(ControlVistas.pantallaResenas)
                     .setPantallaOrigen(ControlVistas.pantallaMenuAdmin);
+            control.<PanelResenas>getPanel(ControlVistas.pantallaResenas)
+                    .setBarberia(barberia);
             control.mostrar(ControlVistas.pantallaResenas);
         });
 

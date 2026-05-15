@@ -34,9 +34,14 @@ public class BarberiaDAO implements IBarberiaDAO {
 
     @Override
     public void actualizarIdBarbero(ObjectId idBarberia, String idBarbero) {
+        if (idBarberia == null || idBarbero == null || idBarbero.isBlank()) {
+            return;
+        }
+
         coleccion.updateOne(
                 eq("_id", idBarberia),
-                com.mongodb.client.model.Updates.set("idBarbero", idBarbero));
+                com.mongodb.client.model.Updates.set("idBarbero", new ObjectId(idBarbero))
+        );
     }
 
     @Override
@@ -66,8 +71,16 @@ public class BarberiaDAO implements IBarberiaDAO {
     
     @Override
     public Barberia buscarPorIdBarbero(String idBarbero) {
-        Barberia result = coleccion.find(
-                eq("idBarbero", new ObjectId(idBarbero))).first();
-        return result;
+        if (idBarbero == null || idBarbero.isBlank()) {
+            return null;
+        }
+
+        try {
+            return coleccion.find(
+                    eq("idBarbero", new ObjectId(idBarbero))
+            ).first();
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }
