@@ -39,7 +39,7 @@ public class PanelSeleccionServicio extends JPanel{
     private JPanel panelLista;
     private BarberiaDTO barberiaActual;
     private String pantallaOrigen = ControlVistas.pantallaInfoBarberia;
-
+    private JScrollPane scroll;
     private final ControlVistas control;
 
     public PanelSeleccionServicio(ControlVistas control) {
@@ -74,7 +74,7 @@ public class PanelSeleccionServicio extends JPanel{
         panelLista.setLayout(new BoxLayout(panelLista, BoxLayout.Y_AXIS));
         panelLista.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        JScrollPane scroll = new JScrollPane(panelLista,
+        scroll = new JScrollPane(panelLista,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setBackground(FONDO);
@@ -104,6 +104,7 @@ public class PanelSeleccionServicio extends JPanel{
 
     public void cargarServicios(BarberiaDTO barberia) {
         this.barberiaActual = barberia;
+
         panelLista.removeAll();
         List<ServicioDTO> servicios = mediadorServicio
                         .obtenerServiciosPorBarberia(barberia.getId());
@@ -120,6 +121,10 @@ public class PanelSeleccionServicio extends JPanel{
         }
         panelLista.revalidate();
         panelLista.repaint();
+        if (scroll != null) {
+            scroll.revalidate();
+            scroll.repaint();
+        }
     }
     
     public void cargarServiciosPorId(String idBarberia) {

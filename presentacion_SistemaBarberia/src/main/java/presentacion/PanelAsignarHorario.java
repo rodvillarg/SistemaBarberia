@@ -30,7 +30,7 @@ public class PanelAsignarHorario extends JPanel {
     private static final Color BTN_ORO = new Color(212, 160, 23);
 
     private static final String[] DIAS = {
-        "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
+        "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"
     };
 
     private final ControlVistas control;
