@@ -1,6 +1,7 @@
 package bos;
 
 import daos.ResenaDAO;
+import interfaces.IResenaDAO;
 import dominio.Resena;
 import dto.ResenaDTO;
 import interfaces.IResenaBO;
@@ -14,19 +15,10 @@ import org.bson.types.ObjectId;
  */
 public class ResenaBO implements IResenaBO {
 
-    private final ResenaDAO resenaDAO;
+    private final IResenaDAO resenaDAO;
     private final ResenaMapper mapper;
 
-
-    private static ResenaBO instancia;
-
-    public static synchronized ResenaBO getInstancia() {
-        if (instancia == null) {
-            instancia = new ResenaBO();
-        }
-        return instancia;
-    }
-    private ResenaBO() {
+    public ResenaBO() {
         this.resenaDAO = new ResenaDAO();
         this.mapper = new ResenaMapper();
     }

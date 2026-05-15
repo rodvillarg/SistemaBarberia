@@ -1,6 +1,7 @@
 package bos;
 
 import daos.ServicioDAO;
+import interfaces.IServicioDAO;
 import dominio.Servicio;
 import dto.ServicioDTO;
 import exceptions.ServicioNoEncontradoException;
@@ -17,19 +18,10 @@ import org.bson.types.ObjectId;
 
 public class ServicioBO implements IServicioBO {
 
-    private final ServicioDAO servicioDAO;
+    private final IServicioDAO servicioDAO;
     private final ServicioMapper mapper;
 
-
-    private static ServicioBO instance;
-
-    public static synchronized ServicioBO getInstancia() {
-        if (instance == null) {
-            instance = new ServicioBO();
-        }
-        return instance;
-    }
-    private ServicioBO() {
+    public ServicioBO() {
         this.servicioDAO = new ServicioDAO();
         this.mapper = new ServicioMapper();
     }
@@ -70,5 +62,10 @@ public class ServicioBO implements IServicioBO {
                     "No se encontró el servicio con id: " + id);
         }
         return mapper.toDTO(servicio);
+    }
+    
+    @Override
+    public void eliminar(String id) {
+        servicioDAO.eliminar(new ObjectId(id));
     }
 }

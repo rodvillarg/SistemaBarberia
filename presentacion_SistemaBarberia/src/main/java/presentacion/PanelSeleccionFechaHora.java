@@ -18,10 +18,10 @@ import java.time.format.TextStyle;
 import java.util.*;
 import javax.swing.BorderFactory;
 import javax.swing.*;
-import presentacion.mediadores.CitaMediator;
-import presentacion.mediadores.HorarioMediator;
-import presentacion.mediadores.ICitaMediator;
-import presentacion.mediadores.IHorarioMediator;
+import itson.negocios_gestorcitas.fachada.CitasFacade;
+import itson.negocios_gestorcitas.fachada.ICitasFacade;
+import itson.negocios_gestorhorarios.fachada.HorariosFacade;
+import itson.negocios_gestorhorarios.fachada.IHorariosFacade;
 import presentacion.controles.ControlVistas;
 
 /**
@@ -44,10 +44,10 @@ public class PanelSeleccionFechaHora extends JPanel {
     private static final Color SLOT_NORMAL = new Color(40, 40, 40);
     private static final Color SLOT_SEL    = new Color(212, 160, 23);
     
-    private final IHorarioMediator mediadorHorario = new HorarioMediator();
-    private final ICitaMediator    mediadorCita    = new CitaMediator();
-
-    private static final String[] DIAS_SEM = {"Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do"};
+    private final IHorariosFacade facadeHorario = new HorariosFacade();
+    private final ICitasFacade    facadeCita    = new CitasFacade();
+    
+    private static final String[] DIAS_SEM = {"Lu", "Ma", "Mi", "Ju", "Vi", "Sa", "Do"};
 
     // Estado
     private CitaDTO   citaEnProceso;
@@ -388,7 +388,7 @@ public class PanelSeleccionFechaHora extends JPanel {
                 .format(java.sql.Date.valueOf(fechaSeleccionada));
         String barberiaId = citaEnProceso.getBarberia().getId();
 
-        List<HorarioDTO> horarios = mediadorHorario.obtenerHorariosPorBarberia(barberiaId);
+        List<HorarioDTO> horarios = facadeHorario.obtenerHorariosPorBarberia(barberiaId);
 
         String diaSemana = java.text.Normalizer
                 .normalize(fechaSeleccionada.getDayOfWeek()
@@ -423,7 +423,7 @@ public class PanelSeleccionFechaHora extends JPanel {
         java.time.LocalTime cierre   = java.time.LocalTime.parse(horarioDelDia.getHoraCierre());
         generarSlots(apertura, cierre);
 
-        List<String> ocupadas = mediadorCita.obtenerHorasOcupadas(barberiaId, fecha);
+        List<String> ocupadas = facadeCita.obtenerHorasOcupadas(barberiaId, fecha);
         // Deshabilitar slots ocupados
         for (JButton btn : slots) {
             String horaBtn = btn.getText();

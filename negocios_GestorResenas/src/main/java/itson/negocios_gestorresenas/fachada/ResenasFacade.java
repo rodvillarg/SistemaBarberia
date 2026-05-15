@@ -17,7 +17,7 @@ public class ResenasFacade implements IResenasFacade {
     private final IResenaBO resenaBO;
 
     public ResenasFacade() {
-        this.resenaBO = ResenaBO.getInstancia();
+        this.resenaBO = new ResenaBO();
     }
 
     @Override

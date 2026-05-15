@@ -9,11 +9,11 @@ import java.awt.*;
 import java.util.List;
 import javax.swing.*;
 import presentacion.controles.ControlVistas;
-import presentacion.mediadores.IServicioMediator;
-import presentacion.mediadores.ServicioMediator;
 import presentacion.utilerias.GestorSesion;
-import presentacion.mediadores.IBarberiaMediator;
-import presentacion.mediadores.BarberiaMediator;
+import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
+import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
+import itson.negocios_gestorservicios.fachada.IServiciosFacade;
+import itson.negocios_gestorservicios.fachada.ServiciosFacade;
 
 /**
  * @author Jesus Rodrigo Villegas Argüelles - 261186
@@ -29,8 +29,8 @@ public class PanelGestionarServicios extends JPanel {
     private static final Color ROJO        = new Color(220, 60, 60);
 
     private final ControlVistas      control;
-    private final IServicioMediator  mediadorServicio;
-    private final IBarberiaMediator  mediadorBarberia;
+    private final IServiciosFacade  facadeServicio;
+    private final IBarberiasFacade  facadeBarberia;
 
     private JPanel    panelLista;
     private JTextField txtNombre;
@@ -39,8 +39,8 @@ public class PanelGestionarServicios extends JPanel {
 
     public PanelGestionarServicios(ControlVistas control) {
         this.control          = control;
-        this.mediadorServicio = new ServicioMediator();
-        this.mediadorBarberia = new BarberiaMediator();
+        this.facadeServicio = new ServiciosFacade();
+        this.facadeBarberia = new BarberiasFacade();
         initUI();
     }
 
@@ -217,7 +217,7 @@ public class PanelGestionarServicios extends JPanel {
             return;
         }
 
-        List<ServicioDTO> servicios = mediadorServicio.obtenerServiciosPorBarberia(idBarberia);
+        List<ServicioDTO> servicios = facadeServicio.obtenerServiciosPorBarberia(idBarberia);
         if (servicios.isEmpty()) {
             JLabel lblVacio = new JLabel("No tienes servicios registrados aún.");
             lblVacio.setFont(new Font("Comic Sans MS", Font.ITALIC, 11));
@@ -268,7 +268,7 @@ public class PanelGestionarServicios extends JPanel {
         lblPrecio.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
         lblPrecio.setForeground(BTN_ORO);
 
-        JButton btnEliminar = new JButton("✕");
+        JButton btnEliminar = new JButton("X");
         btnEliminar.setBackground(FONDO);
         btnEliminar.setForeground(new Color(100, 100, 100));
         btnEliminar.setFont(new Font("Comic Sans MS", Font.BOLD, 12));
@@ -290,7 +290,7 @@ public class PanelGestionarServicios extends JPanel {
                     "¿Eliminar el servicio \"" + s.getNombre() + "\"?",
                     "Confirmar", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                // eliminar pendiente
+                facadeServicio.eliminar(s.getId());
                 cargarServicios();
             }
         });
@@ -351,7 +351,7 @@ public class PanelGestionarServicios extends JPanel {
         dto.setDuracionMinutos(duracion);
         dto.setIdBarberia(idBarberia);
 
-        mediadorServicio.registrar(dto);
+        facadeServicio.registrar(dto);
 
         txtNombre.setText("");
         txtPrecio.setText("");
@@ -363,7 +363,7 @@ public class PanelGestionarServicios extends JPanel {
     private String obtenerIdBarberia() {
         if (!GestorSesion.haySesion()) return null;
         try {
-            return mediadorBarberia
+            return facadeBarberia
                     .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
                     .getId();
         } catch (Exception e) {

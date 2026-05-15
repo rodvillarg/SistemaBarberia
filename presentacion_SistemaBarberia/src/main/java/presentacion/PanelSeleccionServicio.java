@@ -13,11 +13,11 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.SwingConstants;
-import presentacion.mediadores.IServicioMediator;
-import presentacion.mediadores.ServicioMediator;
 import presentacion.controles.ControlVistas;
-import presentacion.mediadores.BarberiaMediator;
-import presentacion.mediadores.IBarberiaMediator;
+import itson.negocios_gestorservicios.fachada.IServiciosFacade;
+import itson.negocios_gestorservicios.fachada.ServiciosFacade;
+import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
+import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
 
 /**
  *
@@ -33,8 +33,8 @@ public class PanelSeleccionServicio extends JPanel{
     private static final Color BTN_ORO     = new Color(212, 160, 23);
     private static final Color HOVER       = new Color(42, 42, 42);
     
-    private final IServicioMediator mediadorServicio = new ServicioMediator();
-    private final IBarberiaMediator mediadorBarberia = new BarberiaMediator();
+    private final IServiciosFacade facadeServicio = new ServiciosFacade();
+    private final IBarberiasFacade facadeBarberia = new BarberiasFacade();
 
     private JPanel panelLista;
     private BarberiaDTO barberiaActual;
@@ -106,8 +106,8 @@ public class PanelSeleccionServicio extends JPanel{
         this.barberiaActual = barberia;
 
         panelLista.removeAll();
-        List<ServicioDTO> servicios = mediadorServicio
-                        .obtenerServiciosPorBarberia(barberia.getId());
+        List<ServicioDTO> servicios = facadeServicio
+                    .obtenerServiciosPorBarberia(barberia.getId());
         if (servicios.isEmpty()) {
             JLabel lbl = new JLabel("Esta barberia no tiene servicios registrados.");
             lbl.setFont(new Font("Comic Sans MS", Font.ITALIC, 13));
@@ -129,7 +129,7 @@ public class PanelSeleccionServicio extends JPanel{
     
     public void cargarServiciosPorId(String idBarberia) {
         try {
-            BarberiaDTO barberia = mediadorBarberia.obtenerPorId(idBarberia);
+            BarberiaDTO barberia = facadeBarberia.obtenerPorId(idBarberia);
             cargarServicios(barberia);
         } catch (exceptions.BarberiaNoEncontradaException ex) {
             JOptionPane.showMessageDialog(this,

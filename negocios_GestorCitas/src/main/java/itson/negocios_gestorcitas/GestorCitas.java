@@ -27,7 +27,7 @@ public class GestorCitas implements IGestorCitas {
     private final ICorreoElectronico correoElectronico;
 
     public GestorCitas() {
-        this.citaBO = CitaBO.getInstancia();
+        this.citaBO = new CitaBO();
         this.correoElectronico = new CorreoElectronico(new ConfiguracionCorreoElectronico());
     }
 

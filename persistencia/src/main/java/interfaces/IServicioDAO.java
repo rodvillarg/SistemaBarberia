@@ -16,4 +16,6 @@ public interface IServicioDAO {
     List<Servicio> buscarPorBarberia(ObjectId barberiaId);
 
     Servicio buscarPorId(ObjectId id);
+    
+    void eliminar(ObjectId id);
 }

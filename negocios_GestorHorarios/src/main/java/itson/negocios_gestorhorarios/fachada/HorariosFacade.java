@@ -17,7 +17,7 @@ public class HorariosFacade implements IHorariosFacade {
     private final IHorarioBO horarioBO;
 
     public HorariosFacade() {
-        this.horarioBO = HorarioBO.getInstancia();
+        this.horarioBO = new HorarioBO();
     }
     
     @Override
@@ -28,5 +28,10 @@ public class HorariosFacade implements IHorariosFacade {
     @Override
     public List<HorarioDTO> obtenerHorariosPorBarberia(String barberiaId) {
         return horarioBO.obtenerHorariosPorBarberia(barberiaId);
+    }
+    
+    @Override
+    public void actualizarHorarios(String barberiaId, List<HorarioDTO> horarios) {
+        horarioBO.actualizarHorarios(barberiaId, horarios);
     }
 }

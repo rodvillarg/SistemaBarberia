@@ -34,11 +34,11 @@ public class InsertMasivo implements IInsertMasivo {
     private final ResenaBO    resenaBO;
 
     public InsertMasivo() {
-        this.barberiaBO = BarberiaBO.getInstancia();
-        this.servicioBO = ServicioBO.getInstancia();
-        this.clienteBO  = ClienteBO.getInstance();
-        this.horarioBO  = HorarioBO.getInstancia();
-        this.resenaBO   = ResenaBO.getInstancia();
+        this.barberiaBO = new BarberiaBO();
+        this.servicioBO = new ServicioBO();
+        this.clienteBO = new ClienteBO();
+        this.horarioBO = new HorarioBO();
+        this.resenaBO = new ResenaBO();
     }
 
     @Override

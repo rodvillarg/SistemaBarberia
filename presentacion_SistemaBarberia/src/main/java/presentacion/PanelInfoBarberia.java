@@ -21,10 +21,10 @@ import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.*;
-import presentacion.mediadores.HorarioMediator;
-import presentacion.mediadores.IHorarioMediator;
-import presentacion.mediadores.IResenaMediator;
-import presentacion.mediadores.ResenaMediator;
+import itson.negocios_gestorhorarios.fachada.HorariosFacade;
+import itson.negocios_gestorhorarios.fachada.IHorariosFacade;
+import itson.negocios_gestorresenas.fachada.IResenasFacade;
+import itson.negocios_gestorresenas.fachada.ResenasFacade;
 import presentacion.controles.ControlVistas;
 
 /**
@@ -43,8 +43,8 @@ public class PanelInfoBarberia extends JPanel {
     private static final Color ROJO        = new Color(239, 68, 68);
     private static final Color BANNER      = new Color(42, 32, 0);
     
-    private final IHorarioMediator mediadorHorario = new HorarioMediator();
-    private final IResenaMediator  mediadorResena  = new ResenaMediator();
+    private final IHorariosFacade facadeHorario = new HorariosFacade();
+    private final IResenasFacade  facadeResena  = new ResenasFacade();
 
     private JLabel      lblNombre;
     private JLabel      lblEstado;
@@ -277,8 +277,8 @@ public class PanelInfoBarberia extends JPanel {
     }
 
     private void actualizarEstado(String barberiaId) {
-        List<HorarioDTO> horarios = mediadorHorario
-                .obtenerHorariosPorBarberia(barberiaId);
+        List<HorarioDTO> horarios = facadeHorario
+                        .obtenerHorariosPorBarberia(barberiaId);
 
         String diaHoyRaw = DayOfWeek.from(java.time.LocalDate.now())
                 .getDisplayName(TextStyle.FULL, new Locale("es", "MX"))
@@ -324,7 +324,7 @@ public class PanelInfoBarberia extends JPanel {
         // Calificacion
         if (barberiaActual != null) {
             lblCalificacion.setText("★ " + String.format("%.1f",
-                    mediadorResena.calcularPromedio(barberiaActual.getId())));
+                    facadeResena.calcularPromedio(barberiaActual.getId())));
         }
 
         // Días de la semana

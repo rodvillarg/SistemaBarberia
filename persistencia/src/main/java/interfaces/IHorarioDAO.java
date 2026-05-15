@@ -13,4 +13,6 @@ public interface IHorarioDAO {
     Horario insertar(Horario horario);
     List<Horario> buscarPorBarberia(ObjectId idBarberia);
     Horario buscarPorId(ObjectId id);
+    void eliminarPorBarberia(ObjectId idBarberia);
+    
 }

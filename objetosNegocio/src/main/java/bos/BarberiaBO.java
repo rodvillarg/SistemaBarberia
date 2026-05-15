@@ -1,6 +1,7 @@
 package bos;
 
 import daos.BarberiaDAO;
+import interfaces.IBarberiaDAO;
 import dominio.Barberia;
 import dto.BarberiaDTO;
 import exceptions.BarberiaNoEncontradaException;
@@ -18,19 +19,10 @@ import org.bson.types.ObjectId;
 
 public class BarberiaBO implements IBarberiaBO {
 
-    private final BarberiaDAO barberiaDAO;
+    private final IBarberiaDAO barberiaDAO;
     private final BarberiaMapper mapper;
 
-
-    private static BarberiaBO instancia;
-
-    public static synchronized BarberiaBO getInstancia() {
-        if (instancia == null) {
-            instancia = new BarberiaBO();
-        }
-        return instancia;
-    }
-    private BarberiaBO() {
+    public BarberiaBO() {
         this.barberiaDAO = new BarberiaDAO();
         this.mapper = new BarberiaMapper();
     }

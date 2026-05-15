@@ -13,20 +13,11 @@ import exceptions.ServicioNoEncontradoException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import static java.awt.Component.CENTER_ALIGNMENT;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
-import presentacion.mediadores.CitaMediator;
-import presentacion.mediadores.ICitaMediator;
+import javax.swing.text.*;
+import itson.negocios_gestorcitas.fachada.CitasFacade;
+import itson.negocios_gestorcitas.fachada.ICitasFacade;
 import presentacion.controles.ControlVistas;
 
 /**
@@ -44,7 +35,7 @@ public class PanelPagoTarjeta extends JPanel {
     private static final Color ERROR_COLOR = new Color(239, 68, 68);
     private static final Font  FONT_LABEL  = new Font("Comic Sans MS", Font.BOLD, 13);
     
-    private final ICitaMediator mediadorCita = new CitaMediator();
+    private final ICitasFacade facadeCita = new CitasFacade();
     
     private JTextField txtNumero, txtNombre, txtFecha, txtCvv;
     private JLabel     lblError;
@@ -277,7 +268,7 @@ public class PanelPagoTarjeta extends JPanel {
         }
 
         try {
-            CitaDTO confirmada = mediadorCita.agendarCita(citaEnProceso);
+            CitaDTO confirmada = facadeCita.agendarCita(citaEnProceso);
             PanelConfirmacion panelConf = control.getPanel(ControlVistas.pantallaConfirmacion);
             panelConf.setNumeroTarjeta(txtNumero.getText().trim());
             panelConf.mostrarCita(confirmada);

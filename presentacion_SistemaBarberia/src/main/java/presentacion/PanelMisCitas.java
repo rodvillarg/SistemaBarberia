@@ -13,8 +13,8 @@ import exceptions.ClienteNoEncontradoException;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
-import presentacion.mediadores.CitaMediator;
-import presentacion.mediadores.ICitaMediator;
+import itson.negocios_gestorcitas.fachada.CitasFacade;
+import itson.negocios_gestorcitas.fachada.ICitasFacade;
 import presentacion.controles.ControlVistas;
 import presentacion.utilerias.GestorSesion;
 
@@ -33,7 +33,7 @@ public class PanelMisCitas extends JPanel {
     private static final Color ROJO        = new Color(239, 68, 68);
     private static final Color AMARILLO    = new Color(234, 179, 8);
     
-    private final ICitaMediator mediadorCita = new CitaMediator();
+   private final ICitasFacade facadeCita = new CitasFacade();
     
     private JPanel panelLista;
     private JLabel lblUsuario;
@@ -144,8 +144,8 @@ public class PanelMisCitas extends JPanel {
         }
 
         try {
-            List<CitaDTO> citas = mediadorCita
-                            .obtenerCitasPorCliente(sesion.getId());
+            List<CitaDTO> citas = facadeCita.obtenerCitasPorCliente(sesion.getId());
+            
             if (citas.isEmpty()) {
                 JLabel lbl = new JLabel("No tienes citas agendadas aún.");
                 lbl.setFont(new Font("Comic Sans MS", Font.ITALIC, 14));

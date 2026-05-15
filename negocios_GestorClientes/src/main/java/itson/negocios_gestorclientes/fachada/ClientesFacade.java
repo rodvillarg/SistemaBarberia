@@ -20,7 +20,7 @@ public class ClientesFacade implements IClientesFacade {
     private final IClienteBO clienteBO;
 
     public ClientesFacade() {
-        this.clienteBO = ClienteBO.getInstance();
+        this.clienteBO = new ClienteBO();
     }
 
     @Override

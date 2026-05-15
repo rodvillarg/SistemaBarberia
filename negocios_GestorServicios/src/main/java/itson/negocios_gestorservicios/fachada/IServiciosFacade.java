@@ -19,4 +19,6 @@ public interface IServiciosFacade {
     List<ServicioDTO> obtenerServiciosPorBarberia(String barberiaId);
 
     ServicioDTO obtenerPorId(String id) throws ServicioNoEncontradoException;
+    
+    void eliminar(String id);
 }

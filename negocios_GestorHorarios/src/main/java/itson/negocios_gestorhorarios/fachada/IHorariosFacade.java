@@ -17,4 +17,6 @@ public interface IHorariosFacade {
     
     List<HorarioDTO> obtenerHorariosPorBarberia(String barberiaId);
     
+    void actualizarHorarios(String barberiaId, List<HorarioDTO> horarios);
+    
 }

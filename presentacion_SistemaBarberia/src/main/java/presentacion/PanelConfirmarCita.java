@@ -18,8 +18,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.*;
-import presentacion.mediadores.CitaMediator;
-import presentacion.mediadores.ICitaMediator;
+import itson.negocios_gestorcitas.fachada.CitasFacade;
+import itson.negocios_gestorcitas.fachada.ICitasFacade;
 import presentacion.controles.ControlVistas;
 
 /**
@@ -35,7 +35,7 @@ public class PanelConfirmarCita extends JPanel {
     private static final Color TEXTO_MUTED = new Color(148, 163, 184);
     private static final Color BTN_ORO = new Color(212, 160, 23);
 
-    private final ICitaMediator mediadorCita = new CitaMediator();
+    private final ICitasFacade facadeCita = new CitasFacade();
 
     private CitaDTO citaEnProceso;
     private JPanel panelResumen;
@@ -269,7 +269,7 @@ public class PanelConfirmarCita extends JPanel {
         }
 
         try {
-            CitaDTO confirmada = mediadorCita.agendarCita(citaEnProceso);
+            CitaDTO confirmada = facadeCita.agendarCita(citaEnProceso);
             control.<PanelConfirmacion>getPanel(ControlVistas.pantallaConfirmacion)
                     .setNumeroTarjeta(null);
             control.<PanelConfirmacion>getPanel(ControlVistas.pantallaConfirmacion)

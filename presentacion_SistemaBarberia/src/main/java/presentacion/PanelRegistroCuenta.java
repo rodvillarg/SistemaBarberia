@@ -14,8 +14,8 @@ import java.awt.*;
 import javax.swing.*;
 import presentacion.controles.ControlVistas;
 import presentacion.utilerias.GestorSesion;
-import presentacion.mediadores.ClienteMediator;
-import presentacion.mediadores.IClienteMediator;
+import itson.negocios_gestorclientes.fachada.ClientesFacade;
+import itson.negocios_gestorclientes.fachada.IClientesFacade;
 
 /**
  *
@@ -23,7 +23,7 @@ import presentacion.mediadores.IClienteMediator;
  */
 public class PanelRegistroCuenta extends JPanel {
     
-    private final IClienteMediator mediadorCliente = new ClienteMediator();
+    private final IClientesFacade facadeCliente = new ClientesFacade();
     
     private static final Color FONDO       = new Color(10, 10, 10);
     private static final Color CARD        = new Color(22, 22, 22);
@@ -230,7 +230,7 @@ public class PanelRegistroCuenta extends JPanel {
         datosPaso1.setRol(rol);
 
         try {
-            ClienteDTO creado = mediadorCliente.registrar(datosPaso1);
+            ClienteDTO creado = facadeCliente.registrar(datosPaso1);
             GestorSesion.setClienteActivo(creado);
             JOptionPane.showMessageDialog(this,
                     "Bienvenido, " + creado.getNombre() + "!",

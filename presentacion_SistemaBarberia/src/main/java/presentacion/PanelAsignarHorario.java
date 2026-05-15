@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import presentacion.controles.ControlVistas;
-import presentacion.mediadores.HorarioMediator;
-import presentacion.mediadores.IHorarioMediator;
-import presentacion.mediadores.BarberiaMediator;
-import presentacion.mediadores.IBarberiaMediator;
+import itson.negocios_gestorhorarios.fachada.IHorariosFacade;
+import itson.negocios_gestorhorarios.fachada.HorariosFacade;
+import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
+import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
 import presentacion.utilerias.GestorSesion;
 
 
@@ -34,8 +34,8 @@ public class PanelAsignarHorario extends JPanel {
     };
 
     private final ControlVistas control;
-    private final IHorarioMediator mediadorHorario;
-    private final IBarberiaMediator mediadorBarberia;
+    private final IHorariosFacade facadeHorario;
+    private final IBarberiasFacade facadeBarberia;
     
 
     private JCheckBox[] checks;
@@ -48,8 +48,8 @@ public class PanelAsignarHorario extends JPanel {
 
     public PanelAsignarHorario(ControlVistas control) {
         this.control = control;
-        this.mediadorHorario = new HorarioMediator();
-        this.mediadorBarberia = new BarberiaMediator();
+        this.facadeHorario = new HorariosFacade();
+        this.facadeBarberia = new BarberiasFacade();
         initUI();
     }
 
@@ -298,14 +298,14 @@ public class PanelAsignarHorario extends JPanel {
             return;
         }
         try {
-            this.idBarberia = mediadorBarberia
+            this.idBarberia = facadeBarberia
                     .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
                     .getId();
         } catch (Exception e) {
             return;
         }
 
-        List<HorarioDTO> horarios = mediadorHorario.obtenerHorariosPorBarberia(idBarberia);
+        List<HorarioDTO> horarios = facadeHorario.obtenerHorariosPorBarberia(idBarberia);
 
         for (int i = 0; i < DIAS.length; i++) {
             checks[i].setSelected(false);
@@ -381,9 +381,7 @@ public class PanelAsignarHorario extends JPanel {
             }
         }
 
-        for (HorarioDTO h : horarios) {
-            mediadorHorario.registrar(h);
-        }
+        facadeHorario.actualizarHorarios(idBarberia, horarios);
 
         JOptionPane.showMessageDialog(this,
                 "Horarios guardados correctamente.",

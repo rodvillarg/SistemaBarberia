@@ -9,8 +9,8 @@ import dto.ClienteDTO;
 import java.awt.*;
 import javax.swing.*;
 import presentacion.controles.ControlVistas;
-import presentacion.mediadores.BarberiaMediator;
-import presentacion.mediadores.IBarberiaMediator;
+import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
+import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
 import presentacion.utilerias.GestorSesion;
 import presentacion.PanelGestionarCitas;
 import presentacion.PanelSeleccionServicio;
@@ -29,11 +29,11 @@ public class PanelMenuAdmin extends JPanel {
 
     private ClienteDTO admin;
     private final ControlVistas control;
-    private final IBarberiaMediator mediadorBarberia;
+    private final IBarberiasFacade facadeBarberia;
 
     public PanelMenuAdmin(ControlVistas control) {
         this.control = control;
-        this.mediadorBarberia = new BarberiaMediator();
+        this.facadeBarberia = new BarberiasFacade();
         initUI();
     }
 
@@ -55,7 +55,7 @@ public class PanelMenuAdmin extends JPanel {
             return;
         }
 
-        BarberiaDTO barberia = mediadorBarberia.obtenerPorBarbero(admin.getId());
+        BarberiaDTO barberia = facadeBarberia.obtenerPorBarbero(admin.getId());
 
         if (barberia == null) {
             add(crearVistaSinBarberia(), BorderLayout.CENTER);
@@ -155,7 +155,7 @@ public class PanelMenuAdmin extends JPanel {
 
         btnCitas.addActionListener(e -> {
             try {
-                String idBarberia = mediadorBarberia
+                String idBarberia = facadeBarberia
                         .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
                         .getId();
                 control.<PanelGestionarCitas>getPanel(ControlVistas.pantallaGestionarCitas)
@@ -167,7 +167,7 @@ public class PanelMenuAdmin extends JPanel {
 
         btnAgendar.addActionListener(e -> {
             try {
-                String idBarberia = mediadorBarberia
+                String idBarberia = facadeBarberia
                         .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
                         .getId();
                 control.<PanelSeleccionServicio>getPanel(ControlVistas.pantallaServicios)

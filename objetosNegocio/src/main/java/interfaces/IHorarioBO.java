@@ -12,4 +12,6 @@ public interface IHorarioBO {
     List<HorarioDTO> obtenerHorariosPorBarberia(String barberiaId);
 
     HorarioDTO registrar(HorarioDTO horario);
+    
+    void actualizarHorarios(String barberiaId, List<HorarioDTO> horarios);
 }

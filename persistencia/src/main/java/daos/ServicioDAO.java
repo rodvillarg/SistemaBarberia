@@ -42,4 +42,9 @@ public class ServicioDAO implements IServicioDAO {
     public Servicio buscarPorId(ObjectId id) {
         return coleccion.find(eq("_id", id)).first();
     }
+    
+    @Override
+    public void eliminar(ObjectId id) {
+        coleccion.deleteOne(eq("_id", id));
+    }
 }

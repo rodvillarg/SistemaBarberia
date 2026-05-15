@@ -4,6 +4,10 @@ import daos.BarberiaDAO;
 import daos.CitaDAO;
 import daos.ClienteDAO;
 import daos.ServicioDAO;
+import interfaces.IBarberiaDAO;
+import interfaces.ICitaDAO;
+import interfaces.IClienteDAO;
+import interfaces.IServicioDAO;
 import dominio.Barberia;
 import dominio.Cita;
 import dominio.Cliente;
@@ -35,18 +39,16 @@ import org.bson.types.ObjectId;
  */
 public class CitaBO implements ICitaBO {
 
-    private static CitaBO instancia;
-
-    private final CitaDAO        citaDAO;
-    private final ClienteDAO     clienteDAO;
-    private final BarberiaDAO    barberiaDAO;
-    private final ServicioDAO    servicioDAO;
+    private final ICitaDAO        citaDAO;
+    private final IClienteDAO     clienteDAO;
+    private final IBarberiaDAO    barberiaDAO;
+    private final IServicioDAO    servicioDAO;
     private final CitaMapper     citaMapper;
     private final ClienteMapper  clienteMapper;
     private final BarberiaMapper barberiaMapper;
     private final ServicioMapper servicioMapper;
 
-    private CitaBO() {
+    public CitaBO() {
         this.citaDAO        = new CitaDAO();
         this.clienteDAO     = new ClienteDAO();
         this.barberiaDAO    = new BarberiaDAO();
@@ -57,12 +59,6 @@ public class CitaBO implements ICitaBO {
         this.servicioMapper = new ServicioMapper();
     }
 
-    public static synchronized CitaBO getInstancia() {
-        if (instancia == null) {
-            instancia = new CitaBO();
-        }
-        return instancia;
-    }
 
     /**
      *

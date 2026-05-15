@@ -18,7 +18,7 @@ public class ServiciosFacade implements IServiciosFacade {
     private final IServicioBO servicioBO;
 
     public ServiciosFacade() {
-        this.servicioBO = ServicioBO.getInstancia();
+        this.servicioBO = new ServicioBO();
     }
     
     @Override
@@ -34,5 +34,10 @@ public class ServiciosFacade implements IServiciosFacade {
     @Override
     public ServicioDTO obtenerPorId(String id) throws ServicioNoEncontradoException {
         return servicioBO.obtenerPorId(id);
+    }
+    
+    @Override
+    public void eliminar(String id) {
+        servicioBO.eliminar(id);
     }
 }

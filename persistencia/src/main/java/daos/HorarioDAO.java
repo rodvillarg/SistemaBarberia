@@ -42,4 +42,9 @@ public class HorarioDAO implements IHorarioDAO {
     public Horario buscarPorId(ObjectId id) {
         return coleccion.find(eq("_id", id)).first();
     }
+    
+    @Override
+    public void eliminarPorBarberia(ObjectId idBarberia) {
+        coleccion.deleteMany(eq("idBarberia", idBarberia));
+    }
 }

@@ -1,6 +1,7 @@
 package bos;
 
 import daos.HorarioDAO;
+import interfaces.IHorarioDAO;
 import dominio.Horario;
 import dto.HorarioDTO;
 import interfaces.IHorarioBO;
@@ -14,19 +15,11 @@ import org.bson.types.ObjectId;
  */
 public class HorarioBO implements IHorarioBO {
 
-    private final HorarioDAO horarioDAO;
+    private final IHorarioDAO horarioDAO;
     private final HorarioMapper mapper;
 
 
-    private static HorarioBO instancia;
-
-    public static synchronized HorarioBO getInstancia() {
-        if (instancia == null) {
-            instancia = new HorarioBO();
-        }
-        return instancia;
-    }
-    private HorarioBO() {
+    public HorarioBO() {
         this.horarioDAO = new HorarioDAO();
         this.mapper     = new HorarioMapper();
     }
@@ -63,5 +56,14 @@ public class HorarioBO implements IHorarioBO {
         if (horario.getHoraApertura() == null || horario.getHoraCierre() == null) return false;
         return horaConsulta.compareTo(horario.getHoraApertura()) >= 0
                 && horaConsulta.compareTo(horario.getHoraCierre()) < 0;
+    }
+    
+    @Override
+    public void actualizarHorarios(String barberiaId, List<HorarioDTO> horarios) {
+        horarioDAO.eliminarPorBarberia(new ObjectId(barberiaId));
+        for (HorarioDTO dto : horarios) {
+            Horario h = mapper.toEntity(dto);
+            horarioDAO.insertar(h);
+        }
     }
 }

@@ -19,10 +19,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.*;
-import presentacion.mediadores.CitaMediator;
-import presentacion.mediadores.ICitaMediator;
-import presentacion.mediadores.BarberiaMediator;
-import presentacion.mediadores.IBarberiaMediator;
+import itson.negocios_gestorcitas.fachada.CitasFacade;
+import itson.negocios_gestorcitas.fachada.ICitasFacade;
+import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
+import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
 import presentacion.controles.ControlVistas;
 import presentacion.utilerias.GestorSesion;
 
@@ -45,9 +45,8 @@ public class PanelGestionarCitas extends JPanel{
     private JLabel lblTitulo;
     private String pantallaOrigen = ControlVistas.pantallaMisCitas;
     
-    private final ICitaMediator mediadorCita = new CitaMediator();
-    private final IBarberiaMediator mediadorBarberia = new BarberiaMediator();
-    
+    private final ICitasFacade facadeCita = new CitasFacade();
+    private final IBarberiasFacade facadeBarberia = new BarberiasFacade();
     private final ControlVistas control;
 
     public PanelGestionarCitas(ControlVistas control) {
@@ -120,7 +119,7 @@ public class PanelGestionarCitas extends JPanel{
 
         if (GestorSesion.getClienteActivo().getRol() == dto.enums.RolUsuario.BARBERO) {
             try {
-                String idBarberia = mediadorBarberia
+                String idBarberia = facadeBarberia
                         .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
                         .getId();
                 cargarCitasPorBarberia(idBarberia);
@@ -132,7 +131,7 @@ public class PanelGestionarCitas extends JPanel{
             this.pantallaOrigen = ControlVistas.pantallaMisCitas;
             ClienteDTO sesion = GestorSesion.getClienteActivo();
             try {
-                List<CitaDTO> citas = mediadorCita.obtenerCitasPorCliente(sesion.getId());
+                List<CitaDTO> citas = facadeCita.obtenerCitasPorCliente(sesion.getId());
                 mostrarCitas(citas);
             } catch (exceptions.ClienteNoEncontradoException ex) {
                 JLabel lbl = new JLabel("Error al cargar citas: " + ex.getMessage());
@@ -149,7 +148,7 @@ public class PanelGestionarCitas extends JPanel{
         lblTitulo.setText("GESTIÓN DE CITAS");
         this.pantallaOrigen = ControlVistas.pantallaMenuAdmin;
 
-        List<CitaDTO> citas = mediadorCita.obtenerCitasPorBarberia(idBarberia);
+        List<CitaDTO> citas = facadeCita.obtenerCitasPorBarberia(idBarberia);
         if (citas.isEmpty()) {
             JLabel lbl = new JLabel("No hay citas registradas.");
             lbl.setFont(new Font("Comic Sans MS", Font.ITALIC, 14));
@@ -305,7 +304,7 @@ public class PanelGestionarCitas extends JPanel{
                     JOptionPane.WARNING_MESSAGE);
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
-                    mediadorCita.cancelarCita(cita.getId());
+                    facadeCita.cancelarCita(cita.getId());
                     control.<PanelSeleccionFechaHora>getPanel(
                             ControlVistas.pantallaFechaHora).refrescarSlots();
                 } catch (exceptions.CitaYaCanceladaException ex) {
@@ -314,7 +313,7 @@ public class PanelGestionarCitas extends JPanel{
                             "Aviso", JOptionPane.WARNING_MESSAGE);
                 }
                 if (ControlVistas.pantallaMenuAdmin.equals(pantallaOrigen)) {
-                    String idBarberia = mediadorBarberia
+                    String idBarberia = facadeBarberia
                             .obtenerPorBarbero(GestorSesion.getClienteActivo().getId())
                             .getId();
                     cargarCitasPorBarberia(idBarberia);

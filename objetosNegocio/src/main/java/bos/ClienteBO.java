@@ -1,6 +1,7 @@
 package bos;
 
 import daos.ClienteDAO;
+import interfaces.IClienteDAO;
 import dominio.Cliente;
 import dto.ClienteDTO;
 import dto.SesionDTO;
@@ -19,21 +20,12 @@ import org.mindrot.jbcrypt.BCrypt;
 */
 public class ClienteBO implements IClienteBO {
 
-    private static ClienteBO instance;
-
-    private final ClienteDAO clienteDAO;
+    private final IClienteDAO clienteDAO;
     private final ClienteMapper mapper;
 
-    private ClienteBO() {
+    public ClienteBO() {
         this.clienteDAO = new ClienteDAO();
         this.mapper = new ClienteMapper();
-    }
-
-    public static synchronized ClienteBO getInstance() {
-        if (instance == null) {
-            instance = new ClienteBO();
-        }
-        return instance;
     }
 
     /**

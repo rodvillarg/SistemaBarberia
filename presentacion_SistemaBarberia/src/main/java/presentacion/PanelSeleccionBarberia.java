@@ -15,14 +15,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.*;
+import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
+import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
+import itson.negocios_gestorhorarios.fachada.HorariosFacade;
+import itson.negocios_gestorhorarios.fachada.IHorariosFacade;
+import itson.negocios_gestorresenas.fachada.IResenasFacade;
+import itson.negocios_gestorresenas.fachada.ResenasFacade;
 import itson.negocios_iniciosesion.IInicioSesionFachada;
 import itson.negocios_iniciosesion.InicioSesionFachada;
-import presentacion.mediadores.BarberiaMediator;
-import presentacion.mediadores.HorarioMediator;
-import presentacion.mediadores.IBarberiaMediator;
-import presentacion.mediadores.IHorarioMediator;
-import presentacion.mediadores.IResenaMediator;
-import presentacion.mediadores.ResenaMediator;
 import presentacion.controles.ControlVistas;
 import presentacion.utilerias.GestorSesion;
 
@@ -43,9 +43,9 @@ public class PanelSeleccionBarberia extends JPanel {
     private static final Color ROJO        = new Color(239, 68, 68);
     
     private final IInicioSesionFachada facadeLogin     = new InicioSesionFachada();
-    private final IBarberiaMediator    mediadorBarberia = new BarberiaMediator();
-    private final IHorarioMediator     mediadorHorario  = new HorarioMediator();
-    private final IResenaMediator      mediadorResena   = new ResenaMediator();
+    private final IBarberiasFacade facadeBarberia = new BarberiasFacade();
+    private final IHorariosFacade  facadeHorario  = new HorariosFacade();
+    private final IResenasFacade   facadeResena   = new ResenasFacade();
 
     private JPanel panelGrid;
     private JLabel lblBienvenida;
@@ -150,7 +150,7 @@ public class PanelSeleccionBarberia extends JPanel {
     }
 
     public void cargarBarberias() {
-        todasLasBarberias = mediadorBarberia.obtenerBarberiasActivas();
+        todasLasBarberias = facadeBarberia.obtenerBarberiasActivas();
         mostrarBarberias(todasLasBarberias);
     }
 
@@ -200,7 +200,7 @@ public class PanelSeleccionBarberia extends JPanel {
         info.setLayout(new BoxLayout(info, BoxLayout.Y_AXIS));
 
         // Badge ABIERTO/CERRADO
-        List<HorarioDTO> horarios = mediadorHorario.obtenerHorariosPorBarberia(barberia.getId());
+        List<HorarioDTO> horarios = facadeHorario.obtenerHorariosPorBarberia(barberia.getId());
         String diaHoyRaw = java.time.DayOfWeek.from(java.time.LocalDate.now())
                 .getDisplayName(java.time.format.TextStyle.FULL, new java.util.Locale("es", "MX"))
                 .toUpperCase();
@@ -245,7 +245,7 @@ public class PanelSeleccionBarberia extends JPanel {
         lblDir.setAlignmentX(LEFT_ALIGNMENT);
 
         // Estrellas
-        double cal = mediadorResena.calcularPromedio(barberia.getId());
+        double cal = facadeResena.calcularPromedio(barberia.getId());
         JLabel lblCal = new JLabel("★  " + String.format("%.1f", cal));
         lblCal.setFont(new Font("Dialog", Font.PLAIN, 14));
         lblCal.setForeground(new Color(250, 204, 21));

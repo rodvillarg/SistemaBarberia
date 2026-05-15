@@ -18,7 +18,7 @@ public class BarberiasFacade implements IBarberiasFacade {
     private final IBarberiaBO barberiaBO;
 
     public BarberiasFacade() {
-        this.barberiaBO = BarberiaBO.getInstancia();
+        this.barberiaBO = new BarberiaBO();
     }
 
     @Override

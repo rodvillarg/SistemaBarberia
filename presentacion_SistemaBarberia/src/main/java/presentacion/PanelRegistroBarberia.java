@@ -9,8 +9,8 @@ import exceptions.UsuarioDuplicadoException;
 import java.awt.*;
 import javax.swing.*;
 import presentacion.controles.ControlVistas;
-import presentacion.mediadores.BarberiaMediator;
-import presentacion.mediadores.IBarberiaMediator;
+import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
+import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
 import presentacion.utilerias.GestorSesion;
 import presentacion.utilerias.PanelRedondeado;
 
@@ -29,7 +29,7 @@ public class PanelRegistroBarberia extends JPanel {
     private static final Color BTN_ORO = new Color(212, 160, 23);
 
     private final ControlVistas control;
-    private final IBarberiaMediator mediadorBarberia;
+    private final IBarberiasFacade facadeBarberia;
 
     private JTextField txtNombre;
     private JTextField txtDireccion;
@@ -40,7 +40,7 @@ public class PanelRegistroBarberia extends JPanel {
 
     public PanelRegistroBarberia(ControlVistas control) {
         this.control = control;
-        this.mediadorBarberia = new BarberiaMediator();
+        this.facadeBarberia = new BarberiasFacade();
         initUI();
     }
 
@@ -216,7 +216,7 @@ public class PanelRegistroBarberia extends JPanel {
         dto.setIdBarbero(GestorSesion.getClienteActivo().getId());
         dto.setActiva(true);
         
-        barberiaRegistrada = mediadorBarberia.registrar(dto);
+        barberiaRegistrada = facadeBarberia.registrar(dto);
         control.<PanelAsignarHorario>getPanel(ControlVistas.pantallaAsignarHorario)
                 .setIdBarberia(barberiaRegistrada.getId());
         control.<PanelAsignarHorario>getPanel(ControlVistas.pantallaAsignarHorario)
