@@ -14,7 +14,9 @@ public class BarberiaMapper {
             return null;
         }
         BarberiaDTO dto = new BarberiaDTO();
-        dto.setId(b.getId().toHexString());
+        if (b.getId() != null) {
+            dto.setId(b.getId().toHexString());
+        }
         dto.setNombre(b.getNombre());
         dto.setDireccion(b.getDireccion());
         dto.setTelefono(b.getTelefono());
@@ -31,8 +33,19 @@ public class BarberiaMapper {
         if (barberiaDTO == null) {
             return null;
         }
+
         Barberia b = new Barberia();
+
         if (barberiaDTO.getId() != null && !barberiaDTO.getId().isBlank()) {
+            try {
+                b.setId(new ObjectId(barberiaDTO.getId()));
+            } catch (IllegalArgumentException e) {
+                b.setId(null);
+                e.printStackTrace();
+            }
+        }
+
+        if (barberiaDTO.getIdBarbero() != null && !barberiaDTO.getIdBarbero().isBlank()) {
             try {
                 b.setIdBarbero(new ObjectId(barberiaDTO.getIdBarbero()));
             } catch (IllegalArgumentException e) {
@@ -40,15 +53,15 @@ public class BarberiaMapper {
                 e.printStackTrace();
             }
         }
+
         b.setNombre(barberiaDTO.getNombre());
         b.setDireccion(barberiaDTO.getDireccion());
         b.setTelefono(barberiaDTO.getTelefono());
-        if (barberiaDTO.getIdBarbero() != null && !barberiaDTO.getIdBarbero().isBlank()) {
-            b.setIdBarbero(new ObjectId(barberiaDTO.getIdBarbero()));
-        }
         b.setDescripcion(barberiaDTO.getDescripcion());
         b.setRutaLogo(barberiaDTO.getRutaLogo());
         b.setActiva(barberiaDTO.isActiva());
+
         return b;
     }
+    
 }

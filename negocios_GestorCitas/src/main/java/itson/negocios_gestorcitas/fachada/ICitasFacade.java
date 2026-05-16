@@ -19,18 +19,21 @@ import java.util.List;
 public interface ICitasFacade {
 
     CitaDTO agendarCita(CitaDTO cita)
-            throws HorarioNoDisponibleException, CitaConflictoClienteException,
-                   ClienteNoEncontradoException, BarberiaNoEncontradaException,
-                   ServicioNoEncontradoException;
+            throws HorarioNoDisponibleException,
+            CitaConflictoClienteException,
+            ClienteNoEncontradoException,
+            BarberiaNoEncontradaException,
+            ServicioNoEncontradoException;
 
-    List<CitaDTO> obtenerCitasPorCliente(String clienteId) throws ClienteNoEncontradoException;
+    List<CitaDTO> obtenerCitasPorCliente(String clienteId)
+            throws ClienteNoEncontradoException;
 
     List<CitaDTO> obtenerCitasPorBarberia(String barberiaId);
 
-    CitaDTO obtenerPorId(String id) throws CitaNoEncontradaException;
+    CitaDTO obtenerPorId(String id)
+            throws CitaNoEncontradaException;
 
     List<String> obtenerHorasOcupadas(String barberiaId, String fecha);
 
     void cancelarCita(String idCita);
-    
 }

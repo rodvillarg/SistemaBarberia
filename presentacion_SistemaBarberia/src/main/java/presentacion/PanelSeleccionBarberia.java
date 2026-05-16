@@ -17,12 +17,12 @@ import java.util.List;
 import javax.swing.*;
 import itson.negocios_gestorbarberias.fachada.BarberiasFacade;
 import itson.negocios_gestorbarberias.fachada.IBarberiasFacade;
+import itson.negocios_gestorclientes.fachada.ClientesFacade;
+import itson.negocios_gestorclientes.fachada.IClientesFacade;
 import itson.negocios_gestorhorarios.fachada.HorariosFacade;
 import itson.negocios_gestorhorarios.fachada.IHorariosFacade;
 import itson.negocios_gestorresenas.fachada.IResenasFacade;
 import itson.negocios_gestorresenas.fachada.ResenasFacade;
-import itson.negocios_iniciosesion.IInicioSesionFachada;
-import itson.negocios_iniciosesion.InicioSesionFachada;
 import presentacion.controles.ControlVistas;
 import presentacion.utilerias.GestorSesion;
 
@@ -42,7 +42,7 @@ public class PanelSeleccionBarberia extends JPanel {
     private static final Color VERDE       = new Color(34, 197, 94);
     private static final Color ROJO        = new Color(239, 68, 68);
     
-    private final IInicioSesionFachada facadeLogin     = new InicioSesionFachada();
+    private final IClientesFacade facadeLogin = new ClientesFacade();
     private final IBarberiasFacade facadeBarberia = new BarberiasFacade();
     private final IHorariosFacade  facadeHorario  = new HorariosFacade();
     private final IResenasFacade   facadeResena   = new ResenasFacade();

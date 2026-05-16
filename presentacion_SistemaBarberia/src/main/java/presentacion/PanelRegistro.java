@@ -26,7 +26,7 @@ public class PanelRegistro extends JPanel{
     private static final Color BTN_ORO     = new Color(212, 160, 23);
     private static final Font  FONT_LABEL  = new Font("Comic Sans MS", Font.BOLD, 13);
 
-    private JTextField txtNombre, txtApellido, txtCorreo, txtTelefono, btnSiguiente, btnVolver;
+    private JTextField txtNombre, txtApellido, txtCorreo, txtTelefono;
 
     private final ControlVistas control;
 

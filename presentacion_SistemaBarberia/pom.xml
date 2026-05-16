@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>negocios_InicioSesion</artifactId>
+            <artifactId>negocios_GestorClientes</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

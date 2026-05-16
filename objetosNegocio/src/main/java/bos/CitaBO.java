@@ -1,19 +1,15 @@
 package bos;
 
-import daos.BarberiaDAO;
 import daos.CitaDAO;
-import daos.ClienteDAO;
-import daos.ServicioDAO;
-import interfaces.IBarberiaDAO;
 import interfaces.ICitaDAO;
-import interfaces.IClienteDAO;
-import interfaces.IServicioDAO;
-import dominio.Barberia;
+import interfaces.IBarberiaBO;
+import interfaces.IClienteBO;
+import interfaces.IServicioBO;
 import dominio.Cita;
-import dominio.Cliente;
-import dominio.Servicio;
+import dto.BarberiaDTO;
 import dto.CitaDTO;
 import dto.ClienteDTO;
+import dto.ServicioDTO;
 import dto.enums.EstadoCita;
 import exceptions.BarberiaNoEncontradaException;
 import exceptions.CitaNoEncontradaException;
@@ -27,43 +23,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import mappers.BarberiaMapper;
 import mappers.CitaMapper;
-import mappers.ClienteMapper;
-import mappers.ServicioMapper;
 import org.bson.types.ObjectId;
 
 /**
- * 
+ *
  * @author Jesus Rodrigo Villegas - 261186
  */
 public class CitaBO implements ICitaBO {
 
-    private final ICitaDAO        citaDAO;
-    private final IClienteDAO     clienteDAO;
-    private final IBarberiaDAO    barberiaDAO;
-    private final IServicioDAO    servicioDAO;
-    private final CitaMapper     citaMapper;
-    private final ClienteMapper  clienteMapper;
-    private final BarberiaMapper barberiaMapper;
-    private final ServicioMapper servicioMapper;
+    private final ICitaDAO citaDAO;
+    private final IClienteBO clienteBO;
+    private final IBarberiaBO barberiaBO;
+    private final IServicioBO servicioBO;
+    private final CitaMapper citaMapper;
 
     public CitaBO() {
-        this.citaDAO        = new CitaDAO();
-        this.clienteDAO     = new ClienteDAO();
-        this.barberiaDAO    = new BarberiaDAO();
-        this.servicioDAO    = new ServicioDAO();
-        this.citaMapper     = new CitaMapper();
-        this.clienteMapper  = new ClienteMapper();
-        this.barberiaMapper = new BarberiaMapper();
-        this.servicioMapper = new ServicioMapper();
+        this.citaDAO = new CitaDAO();
+        this.clienteBO = new ClienteBO();
+        this.barberiaBO = new BarberiaBO();
+        this.servicioBO = new ServicioBO();
+        this.citaMapper = new CitaMapper();
     }
 
-
     /**
-     *
      * @param citaDTO
-     * @return
+     * @return CitaDTO con los datos de la cita agendada
      * @throws exceptions.HorarioNoDisponibleException
      * @throws exceptions.CitaConflictoClienteException
      * @throws exceptions.ClienteNoEncontradoException
@@ -73,48 +58,38 @@ public class CitaBO implements ICitaBO {
     @Override
     public CitaDTO agendarCita(CitaDTO citaDTO)
             throws HorarioNoDisponibleException, CitaConflictoClienteException,
-            ClienteNoEncontradoException,
-                   BarberiaNoEncontradaException, ServicioNoEncontradoException {
+            ClienteNoEncontradoException, BarberiaNoEncontradaException,
+            ServicioNoEncontradoException {
 
         ObjectId idCliente, idBarberia, idServicio;
         try {
-            idCliente  = new ObjectId(citaDTO.getCliente().getId());
+            idCliente = new ObjectId(citaDTO.getCliente().getId());
             idBarberia = new ObjectId(citaDTO.getBarberia().getId());
             idServicio = new ObjectId(citaDTO.getServicio().getId());
         } catch (IllegalArgumentException e) {
             throw new ClienteNoEncontradoException("Uno de los IDs no tiene un formato valido.");
         }
 
-        Cliente cliente = clienteDAO.buscarPorId(idCliente);
-        if (cliente == null)
-            throw new ClienteNoEncontradoException("Cliente no encontrado.");
-
-        Barberia barberia = barberiaDAO.buscarPorId(idBarberia);
-        if (barberia == null)
-            throw new BarberiaNoEncontradaException("Barberia no encontrada.");
-
-        Servicio servicio = servicioDAO.buscarPorId(idServicio);
-        if (servicio == null)
-            throw new ServicioNoEncontradoException("Servicio no encontrado.");
+        ClienteDTO cliente = clienteBO.obtenerPorId(citaDTO.getCliente().getId());
+        BarberiaDTO barberia = barberiaBO.obtenerPorId(citaDTO.getBarberia().getId());
+        ServicioDTO servicio = servicioBO.obtenerPorId(citaDTO.getServicio().getId());
 
         // Verificar que no exista otra cita a la misma hora en la misma barberia
-        if (citaDAO.existeConflicto(barberia.getId(), citaDTO.getFechaHora()))
+        if (citaDAO.existeConflicto(idBarberia, citaDTO.getFechaHora())) {
             throw new HorarioNoDisponibleException(
                     "El horario " + citaDTO.getFechaHora() + " ya esta ocupado. Elige otro.");
+        }
 
         // Verificar que el cliente no tenga ya una cita a la misma hora
-        if (citaDAO.existeConflictoCliente(cliente.getId(), citaDTO.getFechaHora()))
+        if (citaDAO.existeConflictoCliente(idCliente, citaDTO.getFechaHora())) {
             throw new CitaConflictoClienteException(
                     "Ya tienes una cita agendada a esa hora en otra barberia.");
+        }
 
-        Cita entidad  = citaMapper.toEntity(citaDTO);
-        // Cita conflicto = citaDAO.buscarConflicto(barberia.getId(), citaDTO.getFechaHora());
+        Cita entidad = citaMapper.toEntity(citaDTO);
         Cita guardada = citaDAO.insertar(entidad);
 
-        return citaMapper.toDTO(guardada,
-                clienteMapper.toDTO(cliente),
-                barberiaMapper.toDTO(barberia),
-                servicioMapper.toDTO(servicio));
+        return citaMapper.toDTO(guardada, cliente, barberia, servicio);
     }
 
     @Override
@@ -129,24 +104,22 @@ public class CitaBO implements ICitaBO {
         } catch (IllegalArgumentException e) {
             throw new ClienteNoEncontradoException("El ID del cliente no tiene un formato valido.");
         }
-        Cliente cliente = clienteDAO.buscarPorId(oid);
-        if (cliente == null)
-            throw new ClienteNoEncontradoException("Cliente no encontrado.");
+
+        ClienteDTO clienteDTO = clienteBO.obtenerPorId(clienteId);
 
         List<CitaDTO> resultado = new ArrayList<>();
-        ClienteDTO clienteDTO = clienteMapper.toDTO(cliente);
         for (Cita c : citaDAO.buscarPorCliente(oid)) {
-            Barberia barberia = barberiaDAO.buscarPorId(c.getIdBarberia());
-            Servicio servicio = servicioDAO.buscarPorId(c.getIdServicio());
-            if (barberia == null || servicio == null) {
+            BarberiaDTO barberia;
+            ServicioDTO servicio;
+            try {
+                barberia = barberiaBO.obtenerPorId(c.getIdBarberia().toHexString());
+                servicio = servicioBO.obtenerPorId(c.getIdServicio().toHexString());
+            } catch (BarberiaNoEncontradaException | ServicioNoEncontradoException e) {
                 continue;
             }
-            resultado.add(citaMapper.toDTO(c,
-                    clienteDTO,
-                    barberiaMapper.toDTO(barberia),
-                    servicioMapper.toDTO(servicio)));
-        } 
-        
+            resultado.add(citaMapper.toDTO(c, clienteDTO, barberia, servicio));
+        }
+
         // Auto-completar citas vencidas
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
         LocalDateTime ahora = LocalDateTime.now();
@@ -175,16 +148,22 @@ public class CitaBO implements ICitaBO {
             throw new CitaNoEncontradaException("El ID de la cita no tiene un formato valido.");
         }
         Cita cita = citaDAO.buscarPorId(oid);
-        if (cita == null)
+        if (cita == null) {
             throw new CitaNoEncontradaException("Cita no encontrada.");
+        }
 
-        Cliente  cliente  = clienteDAO.buscarPorId(cita.getIdCliente());
-        Barberia barberia = barberiaDAO.buscarPorId(cita.getIdBarberia());
-        Servicio servicio = servicioDAO.buscarPorId(cita.getIdServicio());
-        return citaMapper.toDTO(cita,
-                clienteMapper.toDTO(cliente),
-                barberiaMapper.toDTO(barberia),
-                servicioMapper.toDTO(servicio));
+        ClienteDTO cliente;
+        BarberiaDTO barberia;
+        ServicioDTO servicio;
+        try {
+            cliente = clienteBO.obtenerPorId(cita.getIdCliente().toHexString());
+            barberia = barberiaBO.obtenerPorId(cita.getIdBarberia().toHexString());
+            servicio = servicioBO.obtenerPorId(cita.getIdServicio().toHexString());
+        } catch (ClienteNoEncontradoException | BarberiaNoEncontradaException | ServicioNoEncontradoException e) {
+            throw new CitaNoEncontradaException("No se pudieron cargar los datos de la cita.");
+        }
+
+        return citaMapper.toDTO(cita, cliente, barberia, servicio);
     }
 
     @Override
@@ -202,11 +181,13 @@ public class CitaBO implements ICitaBO {
         }
 
         Cita cita = citaDAO.buscarPorId(oid);
-        if (cita == null)
+        if (cita == null) {
             throw new CitaNoEncontradaException("Cita no encontrada.");
+        }
 
-        if (cita.getEstado() == EstadoCita.CANCELADA)
+        if (cita.getEstado() == EstadoCita.CANCELADA) {
             throw new CitaYaCanceladaException("La cita ya esta cancelada.");
+        }
 
         cita.cancelar();
         citaDAO.cancelarCita(oid);
@@ -228,13 +209,17 @@ public class CitaBO implements ICitaBO {
         List<CitaDTO> resultado = new ArrayList<>();
         List<Cita> citas = citaDAO.buscarPorBarberia(new ObjectId(barberiaId));
         for (Cita cita : citas) {
-            Cliente  cliente  = clienteDAO.buscarPorId(cita.getIdCliente());
-            Barberia barberia = barberiaDAO.buscarPorId(cita.getIdBarberia());
-            Servicio servicio = servicioDAO.buscarPorId(cita.getIdServicio());
-            resultado.add(citaMapper.toDTO(cita,
-                    clienteMapper.toDTO(cliente),
-                    barberiaMapper.toDTO(barberia),
-                    servicioMapper.toDTO(servicio)));
+            ClienteDTO cliente;
+            BarberiaDTO barberia;
+            ServicioDTO servicio;
+            try {
+                cliente = clienteBO.obtenerPorId(cita.getIdCliente().toHexString());
+                barberia = barberiaBO.obtenerPorId(cita.getIdBarberia().toHexString());
+                servicio = servicioBO.obtenerPorId(cita.getIdServicio().toHexString());
+            } catch (ClienteNoEncontradoException | BarberiaNoEncontradaException | ServicioNoEncontradoException e) {
+                continue;
+            }
+            resultado.add(citaMapper.toDTO(cita, cliente, barberia, servicio));
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd H:mm");
         LocalDateTime ahora = LocalDateTime.now();
